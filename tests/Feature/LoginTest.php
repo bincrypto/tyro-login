@@ -7,7 +7,7 @@ it('shows the login form', function () {
     $response = $this->get('/login');
 
     $response->assertStatus(200);
-    $response->assertSee('Sign in to your account');
+    $response->assertSee('Log in to your account');
 });
 
 it('can login with valid credentials', function () {

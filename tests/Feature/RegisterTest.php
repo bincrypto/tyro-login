@@ -7,7 +7,7 @@ it('shows the registration form', function () {
     $response = $this->get('/register');
 
     $response->assertStatus(200);
-    $response->assertSee('Create your account');
+    $response->assertSee('Create an account');
 });
 
 it('can register a new user', function () {
