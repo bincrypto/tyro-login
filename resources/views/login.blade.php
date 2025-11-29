@@ -5,8 +5,8 @@
     @if(in_array($layout, ['split-left', 'split-right']))
     <div class="background-panel" style="background-image: url('{{ $backgroundImage }}');">
         <div class="background-panel-content">
-            <h1>Welcome Back!</h1>
-            <p>Sign in to access your account and continue where you left off. We're glad to see you again.</p>
+            <h1>{{ $pageContent['background_title'] ?? 'Welcome Back!' }}</h1>
+            <p>{{ $pageContent['background_description'] ?? 'Sign in to access your account and continue where you left off. We\'re glad to see you again.' }}</p>
         </div>
     </div>
     @endif

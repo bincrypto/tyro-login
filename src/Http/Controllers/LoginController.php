@@ -29,6 +29,7 @@ class LoginController extends Controller
             'backgroundImage' => config('tyro-login.background_image'),
             'features' => config('tyro-login.features'),
             'registrationEnabled' => config('tyro-login.registration.enabled', true),
+            'pageContent' => config('tyro-login.pages.login'),
         ]);
     }
 

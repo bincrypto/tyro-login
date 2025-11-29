@@ -151,6 +151,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Page Content
+    |--------------------------------------------------------------------------
+    |
+    | Configure the content displayed on different pages.
+    |
+    */
+    'pages' => [
+        'login' => [
+            'background_title' => env('TYRO_LOGIN_BG_TITLE', 'Welcome Back!'),
+            'background_description' => env('TYRO_LOGIN_BG_DESCRIPTION', 'Sign in to access your account and continue where you left off. We\'re glad to see you again.'),
+        ],
+        'register' => [
+            'background_title' => env('TYRO_LOGIN_REGISTER_BG_TITLE', 'Join Us Today!'),
+            'background_description' => env('TYRO_LOGIN_REGISTER_BG_DESCRIPTION', 'Create your account and start your journey with us. It only takes a minute to get started.'),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Lockout Settings
     |--------------------------------------------------------------------------
     |

@@ -27,6 +27,7 @@ class RegisterController extends Controller
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
             'requirePasswordConfirmation' => config('tyro-login.password.require_confirmation', true),
+            'pageContent' => config('tyro-login.pages.register'),
         ]);
     }
 
