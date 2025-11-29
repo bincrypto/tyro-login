@@ -182,3 +182,46 @@ it('clears lockout on successful login', function () {
     // Attempts should be cleared
     expect(Cache::get('tyro-login:lockout-attempts:127.0.0.1'))->toBeNull();
 });
+
+it('shows remaining attempts when show_attempts_left is enabled', function () {
+    config(['tyro-login.lockout.enabled' => true]);
+    config(['tyro-login.lockout.max_attempts' => 5]);
+    config(['tyro-login.lockout.show_attempts_left' => true]);
+
+    User::forceCreate([
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => Hash::make('password'),
+    ]);
+
+    // First failed attempt - should show 4 attempts remaining
+    $response = $this->post('/login', [
+        'email' => 'test@example.com',
+        'password' => 'wrong-password',
+    ]);
+
+    $response->assertSessionHasErrors('email');
+    $errors = session('errors')->get('email');
+    expect($errors[0])->toContain('attempts remaining');
+});
+
+it('does not show remaining attempts when show_attempts_left is disabled', function () {
+    config(['tyro-login.lockout.enabled' => true]);
+    config(['tyro-login.lockout.max_attempts' => 5]);
+    config(['tyro-login.lockout.show_attempts_left' => false]);
+
+    User::forceCreate([
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => Hash::make('password'),
+    ]);
+
+    $response = $this->post('/login', [
+        'email' => 'test@example.com',
+        'password' => 'wrong-password',
+    ]);
+
+    $response->assertSessionHasErrors('email');
+    $errors = session('errors')->get('email');
+    expect($errors[0])->not->toContain('attempts remaining');
+});

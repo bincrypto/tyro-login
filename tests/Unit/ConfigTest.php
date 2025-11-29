@@ -25,8 +25,9 @@ it('has correct tyro integration defaults', function () {
 
 it('has correct lockout defaults', function () {
     expect(config('tyro-login.lockout.enabled'))->toBeTrue();
-    expect(config('tyro-login.lockout.max_attempts'))->toBe(5);
-    expect(config('tyro-login.lockout.duration_minutes'))->toBe(15);
+    expect(config('tyro-login.lockout.max_attempts'))->toBe(3);
+    expect(config('tyro-login.lockout.duration_minutes'))->toBe(2);
+    expect(config('tyro-login.lockout.show_attempts_left'))->toBeFalse();
     expect(config('tyro-login.lockout.message'))->toContain(':minutes');
     expect(config('tyro-login.lockout.title'))->toBe('Account Temporarily Locked');
 });

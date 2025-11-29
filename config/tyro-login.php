@@ -181,6 +181,9 @@ return [
         // Lockout duration in minutes
         'duration_minutes' => env('TYRO_LOGIN_LOCKOUT_DURATION', 2),
 
+        // Show remaining attempts after failed login
+        'show_attempts_left' => env('TYRO_LOGIN_SHOW_ATTEMPTS_LEFT', false),
+
         // Message shown on lockout page (supports :minutes placeholder)
         'message' => env('TYRO_LOGIN_LOCKOUT_MESSAGE', 'Too many failed login attempts. Please try again in :minutes minutes.'),
 

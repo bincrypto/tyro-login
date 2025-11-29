@@ -107,8 +107,22 @@ class LoginController extends Controller
             return redirect()->route('tyro-login.lockout');
         }
 
+        // Build error message with remaining attempts if configured
+        $errorMessage = __('auth.failed');
+        
+        if (config('tyro-login.lockout.enabled', true) && config('tyro-login.lockout.show_attempts_left', false)) {
+            $attemptsLeft = $this->getRemainingAttempts($request);
+            if ($attemptsLeft > 0) {
+                $errorMessage .= ' ' . trans_choice(
+                    '{1} :count attempt remaining.|[2,*] :count attempts remaining.',
+                    $attemptsLeft,
+                    ['count' => $attemptsLeft]
+                );
+            }
+        }
+
         throw ValidationException::withMessages([
-            $loginField => __('auth.failed'),
+            $loginField => $errorMessage,
         ]);
     }
 
@@ -271,6 +285,17 @@ class LoginController extends Controller
         $maxAttempts = config('tyro-login.lockout.max_attempts', 5);
 
         return $attempts >= $maxAttempts;
+    }
+
+    /**
+     * Get the remaining attempts before lockout.
+     */
+    protected function getRemainingAttempts(Request $request): int
+    {
+        $attempts = Cache::get($this->lockoutAttemptsKey($request), 0);
+        $maxAttempts = config('tyro-login.lockout.max_attempts', 5);
+
+        return max(0, $maxAttempts - $attempts);
     }
 
     /**

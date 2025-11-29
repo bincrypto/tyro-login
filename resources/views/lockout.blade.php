@@ -26,14 +26,6 @@
                 @endif
             </div>
 
-            <!-- Lockout Icon -->
-            <div class="lockout-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-            </div>
-
             <!-- Header -->
             <div class="form-header">
                 <h2>{{ $title }}</h2>
@@ -73,18 +65,6 @@
 </div>
 
 <style>
-    .lockout-icon {
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
-
-    .lockout-icon svg {
-        width: 4rem;
-        height: 4rem;
-        color: var(--error-color);
-        opacity: 0.9;
-    }
-
     .lockout-message {
         background-color: var(--error-bg);
         border: 1px solid var(--error-border);
@@ -166,6 +146,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const countdownEl = document.getElementById('countdown');
         const tryAgainBtn = document.getElementById('try-again-btn');
+        const loginUrl = '{{ route('tyro-login.login') }}';
         
         if (!countdownEl) return;
 
@@ -178,12 +159,11 @@
             const remaining = releaseTime - now;
 
             if (remaining <= 0) {
-                // Lockout expired
+                // Lockout expired - auto redirect to login
                 minutesEl.textContent = '00';
                 secondsEl.textContent = '00';
                 countdownEl.classList.add('countdown-expired');
-                tryAgainBtn.classList.remove('disabled');
-                tryAgainBtn.textContent = 'Log in now';
+                window.location.href = loginUrl;
                 return;
             }
 
