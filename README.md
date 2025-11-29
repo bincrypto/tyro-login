@@ -13,7 +13,7 @@
 - 🎨 **Multiple Layouts** - Centered, split-left, and split-right layouts
 - 🖼️ **Beautiful Design** - Modern, professional UI out of the box
 - 🔧 **Highly Configurable** - Customize colors, logos, redirects, and more
-- 🔐 **Secure by Default** - Rate limiting, lockout protection, CSRF protection, and proper validation
+- 🔐 **Secure by Default** - Lockout protection, CSRF protection, and proper validation
 - 🔗 **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
 - 🌓 **Dark/Light Theme** - Automatic theme detection with manual toggle
 - 📱 **Fully Responsive** - Works perfectly on all devices
@@ -89,16 +89,6 @@ If you have [hasinhayder/tyro](https://github.com/hasinhayder/tyro) installed, T
 'tyro' => [
     'assign_default_role' => env('TYRO_LOGIN_ASSIGN_DEFAULT_ROLE', true),
     'default_role_slug' => env('TYRO_LOGIN_DEFAULT_ROLE_SLUG', 'user'),
-],
-```
-
-### Rate Limiting
-
-```php
-'rate_limiting' => [
-    'enabled' => env('TYRO_LOGIN_RATE_LIMITING', true),
-    'max_attempts' => env('TYRO_LOGIN_MAX_ATTEMPTS', 5),
-    'decay_minutes' => env('TYRO_LOGIN_DECAY_MINUTES', 1),
 ],
 ```
 
@@ -197,7 +187,6 @@ Tyro Login registers the following routes:
 ## 🔒 Security Features
 
 - **CSRF Protection** - All forms include CSRF tokens
-- **Rate Limiting** - Configurable brute-force protection
 - **Lockout Protection** - Temporarily lock accounts after failed attempts (cache-based, no database)
 - **Password Hashing** - Uses Laravel's secure hashing
 - **Session Regeneration** - Prevents session fixation attacks

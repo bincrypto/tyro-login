@@ -8,8 +8,6 @@ it('has the correct default configuration', function () {
     expect(config('tyro-login.features.remember_me'))->toBeTrue();
     expect(config('tyro-login.features.forgot_password'))->toBeTrue();
     expect(config('tyro-login.password.min_length'))->toBe(8);
-    expect(config('tyro-login.rate_limiting.enabled'))->toBeTrue();
-    expect(config('tyro-login.rate_limiting.max_attempts'))->toBe(5);
 });
 
 it('has correct redirect defaults', function () {
@@ -28,6 +26,7 @@ it('has correct lockout defaults', function () {
     expect(config('tyro-login.lockout.max_attempts'))->toBe(3);
     expect(config('tyro-login.lockout.duration_minutes'))->toBe(2);
     expect(config('tyro-login.lockout.show_attempts_left'))->toBeFalse();
+    expect(config('tyro-login.lockout.auto_redirect'))->toBeTrue();
     expect(config('tyro-login.lockout.message'))->toContain(':minutes');
     expect(config('tyro-login.lockout.title'))->toBe('Account Temporarily Locked');
 });

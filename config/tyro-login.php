@@ -151,17 +151,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Rate Limiting
-    |--------------------------------------------------------------------------
-    */
-    'rate_limiting' => [
-        'enabled' => env('TYRO_LOGIN_RATE_LIMITING', true),
-        'max_attempts' => env('TYRO_LOGIN_MAX_ATTEMPTS', 5),
-        'decay_minutes' => env('TYRO_LOGIN_DECAY_MINUTES', 1),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Lockout Settings
     |--------------------------------------------------------------------------
     |
@@ -183,6 +172,9 @@ return [
 
         // Show remaining attempts after failed login
         'show_attempts_left' => env('TYRO_LOGIN_SHOW_ATTEMPTS_LEFT', false),
+
+        // Auto-redirect to login page when countdown expires
+        'auto_redirect' => env('TYRO_LOGIN_LOCKOUT_AUTO_REDIRECT', true),
 
         // Message shown on lockout page (supports :minutes placeholder)
         'message' => env('TYRO_LOGIN_LOCKOUT_MESSAGE', 'Too many failed login attempts. Please try again in :minutes minutes.'),

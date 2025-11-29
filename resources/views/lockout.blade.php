@@ -147,6 +147,7 @@
         const countdownEl = document.getElementById('countdown');
         const tryAgainBtn = document.getElementById('try-again-btn');
         const loginUrl = '{{ route('tyro-login.login') }}';
+        const autoRedirect = {{ config('tyro-login.lockout.auto_redirect', true) ? 'true' : 'false' }};
         
         if (!countdownEl) return;
 
@@ -159,11 +160,16 @@
             const remaining = releaseTime - now;
 
             if (remaining <= 0) {
-                // Lockout expired - auto redirect to login
+                // Lockout expired
                 minutesEl.textContent = '00';
                 secondsEl.textContent = '00';
                 countdownEl.classList.add('countdown-expired');
-                window.location.href = loginUrl;
+                tryAgainBtn.classList.remove('disabled');
+                
+                // Auto redirect if enabled
+                if (autoRedirect) {
+                    window.location.href = loginUrl;
+                }
                 return;
             }
 

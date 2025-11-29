@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -76,8 +75,6 @@ class LoginController extends Controller
             return redirect()->route('tyro-login.lockout');
         }
 
-        $this->ensureIsNotRateLimited($request);
-
         $loginField = config('tyro-login.login_field', 'email');
         
         $credentials = $request->validate($this->getValidationRules($loginField));
@@ -92,13 +89,11 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            RateLimiter::clear($this->throttleKey($request));
             $this->clearLockout($request);
 
             return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
         }
 
-        $this->incrementRateLimiter($request);
         $this->incrementLockoutAttempts($request);
 
         // Check if we should lock out the user now
@@ -158,53 +153,6 @@ class LoginController extends Controller
         }
 
         return $rules;
-    }
-
-    /**
-     * Ensure the login request is not rate limited.
-     */
-    protected function ensureIsNotRateLimited(Request $request): void
-    {
-        if (!config('tyro-login.rate_limiting.enabled', true)) {
-            return;
-        }
-
-        $maxAttempts = config('tyro-login.rate_limiting.max_attempts', 5);
-
-        if (!RateLimiter::tooManyAttempts($this->throttleKey($request), $maxAttempts)) {
-            return;
-        }
-
-        $seconds = RateLimiter::availableIn($this->throttleKey($request));
-
-        throw ValidationException::withMessages([
-            'email' => __('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
-        ]);
-    }
-
-    /**
-     * Increment the rate limiter.
-     */
-    protected function incrementRateLimiter(Request $request): void
-    {
-        if (!config('tyro-login.rate_limiting.enabled', true)) {
-            return;
-        }
-
-        $decayMinutes = config('tyro-login.rate_limiting.decay_minutes', 1);
-
-        RateLimiter::hit($this->throttleKey($request), $decayMinutes * 60);
-    }
-
-    /**
-     * Get the rate limiting throttle key.
-     */
-    protected function throttleKey(Request $request): string
-    {
-        return Str::transliterate(Str::lower($request->input('email', $request->input('username', ''))) . '|' . $request->ip());
     }
 
     /**
