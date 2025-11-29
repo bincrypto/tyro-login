@@ -1,0 +1,54 @@
+{
+    "name": "hasinhayder/tyro-login",
+    "description": "Tyro Login - Beautiful, customizable authentication views for Laravel 12",
+    "keywords": [
+        "laravel",
+        "authentication",
+        "login",
+        "register",
+        "auth",
+        "blade",
+        "ui"
+    ],
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^12.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.25",
+        "nunomaduro/collision": "^8.6",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "HasinHayder\\TyroLogin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HasinHayder\\TyroLogin\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "HasinHayder\\TyroLogin\\Providers\\TyroLoginServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
