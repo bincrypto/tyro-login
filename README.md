@@ -24,7 +24,7 @@
 - **Login OTP** - Two-factor authentication via email OTP codes
 - **Email Verification** - Optional email verification for new registrations
 - **Password Reset** - Built-in forgot password and reset functionality
-- **Beautiful Emails** - Modern, responsive HTML email templates
+- **Beautiful Emails** - Sleek, minimal HTML email templates for OTP, password reset, verification, and welcome emails
 - **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
 - **Dark/Light Theme** - Automatic theme detection with manual toggle
 - **Fully Responsive** - Works perfectly on all devices
@@ -196,7 +196,7 @@ When enabled, OTP codes, verification URLs, and password reset URLs are logged t
 
 ### Email Configuration
 
-Tyro Login sends beautiful, responsive HTML emails. Each email type can be individually enabled or disabled:
+Tyro Login sends sleek, minimal HTML emails with a clean design. Each email type can be individually enabled or disabled:
 
 ```php
 'emails' => [
