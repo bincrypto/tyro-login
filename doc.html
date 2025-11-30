@@ -779,12 +779,6 @@ TYRO_LOGIN_BACKGROUND_IMAGE=https://images.unsplash.com/photo-1618005182384-a83a
 
     // Logo height for proper sizing
     'logo_height' => env('TYRO_LOGIN_LOGO_HEIGHT', '48px'),
-
-    // Primary button and accent color
-    'primary_color' => env('TYRO_LOGIN_PRIMARY_COLOR', '#4f46e5'),
-
-    // Primary button hover color
-    'primary_hover_color' => env('TYRO_LOGIN_PRIMARY_HOVER_COLOR', '#4338ca'),
 ],</code></pre>
                 </div>
 
@@ -795,9 +789,7 @@ TYRO_LOGIN_BACKGROUND_IMAGE=https://images.unsplash.com/photo-1618005182384-a83a
                     </div>
                     <pre><code class="language-bash">TYRO_LOGIN_APP_NAME="My App"
 TYRO_LOGIN_LOGO=https://myapp.com/logo.svg
-TYRO_LOGIN_LOGO_HEIGHT=48px
-TYRO_LOGIN_PRIMARY_COLOR=#4f46e5
-TYRO_LOGIN_PRIMARY_HOVER_COLOR=#4338ca</code></pre>
+TYRO_LOGIN_LOGO_HEIGHT=48px</code></pre>
                 </div>
             </section>
 
@@ -1223,8 +1215,6 @@ TYRO_LOGIN_BACKGROUND_IMAGE=https://...
 TYRO_LOGIN_APP_NAME="My Application"
 TYRO_LOGIN_LOGO=https://myapp.com/logo.png
 TYRO_LOGIN_LOGO_HEIGHT=48px
-TYRO_LOGIN_PRIMARY_COLOR=#4f46e5
-TYRO_LOGIN_PRIMARY_HOVER_COLOR=#4338ca
 
 # Redirects
 TYRO_LOGIN_REDIRECT_AFTER_LOGIN=/dashboard
@@ -1469,16 +1459,6 @@ php artisan tyro-login:publish --force</code></pre>
 
                 <h3 class="doc-section-subtitle">How do I disable registration?</h3>
                 <p class="doc-text">Set <code class="doc-inline-code">TYRO_LOGIN_REGISTRATION_ENABLED=false</code> in your <code class="doc-inline-code">.env</code> file.</p>
-
-                <h3 class="doc-section-subtitle">How do I customize the colors without publishing views?</h3>
-                <p class="doc-text">Use environment variables:</p>
-                <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">.env</span>
-                    </div>
-                    <pre><code class="language-bash">TYRO_LOGIN_PRIMARY_COLOR=#your-color
-TYRO_LOGIN_PRIMARY_HOVER_COLOR=#your-hover-color</code></pre>
-                </div>
 
                 <h3 class="doc-section-subtitle">Can I use this without the Tyro RBAC package?</h3>
                 <p class="doc-text">Yes! Tyro Login works completely independently. The Tyro integration is optional and only activates if the Tyro package is installed.</p>
