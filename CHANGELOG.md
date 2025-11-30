@@ -2,6 +2,28 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [1.2.0] - 2025-12-01
+
+### Added
+- **Beautiful Email Templates** - Modern, responsive HTML email templates
+  - OTP verification email with large, readable code display
+  - Password reset email with secure reset button
+  - Email verification email with verification link
+  - Welcome email for new registrations
+- **Email Configuration** - Each email type can be individually enabled/disabled
+  - `TYRO_LOGIN_EMAIL_OTP` - Toggle OTP emails
+  - `TYRO_LOGIN_EMAIL_PASSWORD_RESET` - Toggle password reset emails
+  - `TYRO_LOGIN_EMAIL_VERIFY` - Toggle verification emails
+  - `TYRO_LOGIN_EMAIL_WELCOME` - Toggle welcome emails
+- **Customizable Email Subjects** - Configure email subjects via environment variables
+- **Email Template Publishing** - Publish only email templates with `--emails` flag
+  - `php artisan tyro-login:publish --emails`
+
+### Changed
+- Emails are now sent automatically when features are enabled (OTP, verification, password reset)
+- Welcome email is sent after registration when email verification is not required
+- Removed placeholder comments about email integration - emails are now fully functional
+
 ## [1.1.0] - 2025-11-30
 
 ### Added

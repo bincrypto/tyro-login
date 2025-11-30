@@ -317,6 +317,42 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Email Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure email sending for various authentication actions.
+    | Each email type can be individually enabled or disabled.
+    | Email templates can be customized by publishing them.
+    |
+    */
+    'emails' => [
+        // OTP verification email
+        'otp' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_OTP', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_OTP_SUBJECT', 'Your Verification Code'),
+        ],
+
+        // Password reset email
+        'password_reset' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET_SUBJECT', 'Reset Your Password'),
+        ],
+
+        // Email verification email
+        'verify_email' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_VERIFY', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_VERIFY_SUBJECT', 'Verify Your Email Address'),
+        ],
+
+        // Welcome email after registration
+        'welcome' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_WELCOME', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_WELCOME_SUBJECT', null), // null = uses default with app name
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Lockout Settings
     |--------------------------------------------------------------------------
     |

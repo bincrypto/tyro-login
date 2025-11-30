@@ -24,6 +24,7 @@
 - **Login OTP** - Two-factor authentication via email OTP codes
 - **Email Verification** - Optional email verification for new registrations
 - **Password Reset** - Built-in forgot password and reset functionality
+- **Beautiful Emails** - Modern, responsive HTML email templates
 - **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
 - **Dark/Light Theme** - Automatic theme detection with manual toggle
 - **Fully Responsive** - Works perfectly on all devices
@@ -193,6 +194,63 @@ Enable debug logging for development:
 
 When enabled, OTP codes, verification URLs, and password reset URLs are logged to `storage/logs/laravel.log`.
 
+### Email Configuration
+
+Tyro Login sends beautiful, responsive HTML emails. Each email type can be individually enabled or disabled:
+
+```php
+'emails' => [
+    // OTP verification email
+    'otp' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_OTP', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_OTP_SUBJECT', 'Your Verification Code'),
+    ],
+
+    // Password reset email
+    'password_reset' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET_SUBJECT', 'Reset Your Password'),
+    ],
+
+    // Email verification email
+    'verify_email' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_VERIFY', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_VERIFY_SUBJECT', 'Verify Your Email Address'),
+    ],
+
+    // Welcome email after registration
+    'welcome' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_WELCOME', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_WELCOME_SUBJECT', null), // Uses default with app name
+    ],
+],
+```
+
+**Available Emails:**
+- **OTP Email** - Sent when OTP verification is enabled
+- **Password Reset Email** - Sent when user requests password reset
+- **Email Verification Email** - Sent when email verification is required
+- **Welcome Email** - Sent after successful registration (when verification is not required)
+
+**Customizing Email Templates:**
+
+Publish email templates to customize them:
+
+```bash
+php artisan tyro-login:publish --emails
+```
+
+Templates will be published to `resources/views/vendor/tyro-login/emails/`.
+
+Available template variables:
+- `{{ $name }}` - User's name
+- `{{ $appName }}` - Application name
+- `{{ $otp }}` - OTP code (for OTP email)
+- `{{ $resetUrl }}` - Password reset URL (for password reset email)
+- `{{ $verificationUrl }}` - Verification URL (for verification email)
+- `{{ $loginUrl }}` - Login URL (for welcome email)
+- `{{ $expiresIn }}` - Expiration time in minutes
+
 ### Lockout Protection
 
 When enabled, users will be locked out after too many failed login attempts. The lockout state is stored in cache (no database required), and the cache is automatically cleared when the lockout expires.
@@ -245,13 +303,23 @@ php artisan tyro-login:publish --views
 
 Views will be published to `resources/views/vendor/tyro-login/`.
 
+### Publishing Email Templates
+
+To customize the email templates:
+
+```bash
+php artisan tyro-login:publish --emails
+```
+
+Email templates will be published to `resources/views/vendor/tyro-login/emails/`.
+
 ### Publishing Everything
 
 ```bash
 php artisan tyro-login:publish
 ```
 
-This publishes config, views, and assets.
+This publishes config, views, email templates, and assets.
 
 ## Artisan Commands
 
@@ -260,7 +328,8 @@ Tyro Login provides several artisan commands:
 | Command | Description |
 |---------|-------------|
 | `php artisan tyro-login:install` | Install the package and publish configuration |
-| `php artisan tyro-login:publish` | Publish config, views, and assets |
+| `php artisan tyro-login:publish` | Publish config, views, email templates, and assets |
+| `php artisan tyro-login:publish --emails` | Publish only email templates |
 | `php artisan tyro-login:version` | Display the current Tyro Login version |
 | `php artisan tyro-login:doc` | Open the documentation in your browser |
 | `php artisan tyro-login:star` | Open GitHub repository to star the project |

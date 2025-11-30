@@ -2,12 +2,14 @@
 
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
+use HasinHayder\TyroLogin\Mail\VerifyEmailMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -40,7 +42,7 @@ class VerificationController extends Controller
     /**
      * Generate a verification URL for the user.
      */
-    public static function generateVerificationUrl($user): string
+    public static function generateVerificationUrl($user, bool $sendEmail = true): string
     {
         $token = Str::random(64);
         $expiresAt = now()->addMinutes(config('tyro-login.verification.expire', 60));
@@ -67,6 +69,15 @@ class VerificationController extends Controller
                 'email' => $user->email,
                 'url' => $url,
             ]);
+        }
+
+        // Send verification email if enabled
+        if ($sendEmail && config('tyro-login.emails.verify_email.enabled', true)) {
+            Mail::to($user->email)->send(new VerifyEmailMail(
+                verificationUrl: $url,
+                userName: $user->name ?? 'User',
+                expiresInMinutes: config('tyro-login.verification.expire', 60)
+            ));
         }
 
         return $url;
@@ -141,9 +152,6 @@ class VerificationController extends Controller
 
         // Generate new verification URL
         $verificationUrl = self::generateVerificationUrl($user);
-
-        // In a real application, you would send this via email
-        // For development, it's logged above
 
         return redirect()->route('tyro-login.verification.notice')
             ->with('success', 'A new verification link has been sent to your email address.');

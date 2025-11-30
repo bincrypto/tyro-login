@@ -2,12 +2,14 @@
 
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
+use HasinHayder\TyroLogin\Mail\WelcomeMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -88,10 +90,18 @@ class RegisterController extends Controller
             // Generate verification URL and log it for development
             VerificationController::generateVerificationUrl($user);
 
-            // Store email in session for the verification notice pag`e
+            // Store email in session for the verification notice page
             $request->session()->put('tyro-login.verification.email', $user->email);
 
             return redirect()->route('tyro-login.verification.notice');
+        }
+
+        // Send welcome email if enabled (only when email verification is not required)
+        if (config('tyro-login.emails.welcome.enabled', true)) {
+            Mail::to($user->email)->send(new WelcomeMail(
+                userName: $user->name ?? 'User',
+                loginUrl: url(config('tyro-login.routes.prefix', '') . '/login')
+            ));
         }
 
         // Auto-login if enabled and email verification is not required

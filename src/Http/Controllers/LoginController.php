@@ -2,12 +2,14 @@
 
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
+use HasinHayder\TyroLogin\Mail\OtpMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -445,6 +447,15 @@ class LoginController extends Controller
             Log::info("OTP Code: {$otp}");
             Log::info("Expires in: {$expire} minutes");
             Log::info('======================');
+        }
+
+        // Send OTP via email if enabled
+        if (config('tyro-login.emails.otp.enabled', true)) {
+            Mail::to($user->email)->send(new OtpMail(
+                otp: $otp,
+                userName: $user->name ?? 'User',
+                expiresInMinutes: $expire
+            ));
         }
 
         // Initialize resend tracking if not exists
