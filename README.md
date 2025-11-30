@@ -205,6 +205,18 @@ TYRO_LOGIN_PRIMARY_HOVER_COLOR=#4338ca
 TYRO_LOGIN_BACKGROUND_IMAGE=https://example.com/image.jpg
 ```
 
+## 🖥️ Artisan Commands
+
+Tyro Login provides several artisan commands:
+
+| Command | Description |
+|---------|-------------|
+| `php artisan tyro-login:install` | Install the package and publish configuration |
+| `php artisan tyro-login:publish` | Publish config, views, and assets |
+| `php artisan tyro-login:version` | Display the current Tyro Login version |
+| `php artisan tyro-login:doc` | Open the documentation in your browser |
+| `php artisan tyro-login:star` | Open GitHub repository to give it a star ⭐ |
+
 ## 📍 Routes
 
 Tyro Login registers the following routes:

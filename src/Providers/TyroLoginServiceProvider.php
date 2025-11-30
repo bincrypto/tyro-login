@@ -2,8 +2,11 @@
 
 namespace HasinHayder\TyroLogin\Providers;
 
+use HasinHayder\TyroLogin\Console\Commands\DocCommand;
 use HasinHayder\TyroLogin\Console\Commands\InstallCommand;
 use HasinHayder\TyroLogin\Console\Commands\PublishCommand;
+use HasinHayder\TyroLogin\Console\Commands\StarCommand;
+use HasinHayder\TyroLogin\Console\Commands\VersionCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -76,6 +79,9 @@ class TyroLoginServiceProvider extends ServiceProvider
         $this->commands([
             InstallCommand::class,
             PublishCommand::class,
+            VersionCommand::class,
+            DocCommand::class,
+            StarCommand::class,
         ]);
     }
 }

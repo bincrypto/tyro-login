@@ -61,6 +61,11 @@ class InstallCommand extends Command
         $this->info('  - split-left   : Background on left, form on right');
         $this->info('  - split-right  : Form on left, background on right');
         $this->info('');
+        $this->info('  Helpful commands:');
+        $this->info('  - tyro-login:version  : Show version info');
+        $this->info('  - tyro-login:doc      : Open documentation');
+        $this->info('  - tyro-login:star     : Star on GitHub ⭐');
+        $this->info('');
 
         return self::SUCCESS;
     }
