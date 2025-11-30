@@ -72,8 +72,6 @@ After installation, you can customize the package by editing `config/tyro-login.
     'app_name' => env('TYRO_LOGIN_APP_NAME', 'Laravel'),
     'logo' => env('TYRO_LOGIN_LOGO', null), // URL to your logo
     'logo_height' => env('TYRO_LOGIN_LOGO_HEIGHT', '48px'),
-    'primary_color' => env('TYRO_LOGIN_PRIMARY_COLOR', '#4f46e5'),
-    'primary_hover_color' => env('TYRO_LOGIN_PRIMARY_HOVER_COLOR', '#4338ca'),
 ],
 ```
 
@@ -254,16 +252,6 @@ php artisan tyro-login:publish
 ```
 
 This publishes config, views, and assets.
-
-### Custom Styling via Environment
-
-You can customize colors without publishing files:
-
-```env
-TYRO_LOGIN_PRIMARY_COLOR=#4f46e5
-TYRO_LOGIN_PRIMARY_HOVER_COLOR=#4338ca
-TYRO_LOGIN_BACKGROUND_IMAGE=https://example.com/image.jpg
-```
 
 ## Artisan Commands
 

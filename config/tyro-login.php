@@ -6,7 +6,7 @@ return [
     | Tyro Login Version
     |--------------------------------------------------------------------------
     */
-    'version' => '1.1.0',
+    'version' => '1.1.1',
 
     /*
     |--------------------------------------------------------------------------
@@ -55,8 +55,6 @@ return [
         'app_name' => env('TYRO_LOGIN_APP_NAME', env('APP_NAME', 'Laravel')),
         'logo' => env('TYRO_LOGIN_LOGO', null),
         'logo_height' => env('TYRO_LOGIN_LOGO_HEIGHT', '48px'),
-        'primary_color' => env('TYRO_LOGIN_PRIMARY_COLOR', '#4f46e5'),
-        'primary_hover_color' => env('TYRO_LOGIN_PRIMARY_HOVER_COLOR', '#4338ca'),
     ],
 
     /*
