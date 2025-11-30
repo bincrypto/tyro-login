@@ -60,7 +60,7 @@ class RegisterController extends Controller
             // Generate verification URL and log it for development
             VerificationController::generateVerificationUrl($user);
 
-            // Store email in session for the verification notice page
+            // Store email in session for the verification notice pag`e
             $request->session()->put('tyro-login.verification.email', $user->email);
 
             return redirect()->route('tyro-login.verification.notice');
