@@ -1,0 +1,30 @@
+# Build artifacts
+/vendor/
+/node_modules/
+.phpunit.cache/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+/coverage/
+.phpunit.result.cache
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# Package lock (use composer.json for version constraints)
+composer.lock
