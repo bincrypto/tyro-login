@@ -813,6 +813,9 @@ TYRO_LOGIN_LOGO_HEIGHT=48px</code></pre>
 
     // Where to redirect after successful registration
     'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/'),
+
+    // Where to redirect after email verification
+    'after_email_verification' => env('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', '/login'),
 ],</code></pre>
                 </div>
             </section>
@@ -976,6 +979,11 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
 'verification' => [
     // Token expiration time in minutes
     'expire' => env('TYRO_LOGIN_VERIFICATION_EXPIRE', 60),
+],
+
+'redirects' => [
+    // Where to redirect after email verification (default: login page)
+    'after_email_verification' => env('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', '/login'),
 ],</code></pre>
                 </div>
 
@@ -983,8 +991,9 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
                 <ul class="doc-list">
                     <li><strong>Step 1:</strong> User registers → Redirected to verification notice page</li>
                     <li><strong>Step 2:</strong> Verification URL is generated and logged (for development)</li>
-                    <li><strong>Step 3:</strong> User clicks the link → Email is verified and user is logged in</li>
+                    <li><strong>Step 3:</strong> User clicks the link → Email is verified and user is redirected to login</li>
                     <li><strong>Step 4:</strong> Users can request a new verification email from the notice page</li>
+                    <li><strong>Step 5:</strong> If user tries to login with unverified email → Shown "Email Not Verified" page</li>
                 </ul>
 
                 <div class="doc-alert doc-alert-info">
@@ -1000,7 +1009,10 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
 TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION=true
 
 # Token expiration time in minutes
-TYRO_LOGIN_VERIFICATION_EXPIRE=60</code></pre>
+TYRO_LOGIN_VERIFICATION_EXPIRE=60
+
+# Where to redirect after verification (default: /login)
+TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION=/login</code></pre>
                 </div>
             </section>
 
@@ -1307,6 +1319,7 @@ TYRO_LOGIN_LOGO_HEIGHT=48px
 TYRO_LOGIN_REDIRECT_AFTER_LOGIN=/dashboard
 TYRO_LOGIN_REDIRECT_AFTER_LOGOUT=/login
 TYRO_LOGIN_REDIRECT_AFTER_REGISTER=/dashboard
+TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION=/login
 
 # Registration
 TYRO_LOGIN_REGISTRATION_ENABLED=true
@@ -1476,6 +1489,12 @@ php artisan tyro-login:publish --force</code></pre>
                             <td><code class="doc-inline-code">/email/verify</code></td>
                             <td><code class="doc-inline-code">tyro-login.verification.notice</code></td>
                             <td>Show verification notice</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                            <td><code class="doc-inline-code">/email/not-verified</code></td>
+                            <td><code class="doc-inline-code">tyro-login.verification.not-verified</code></td>
+                            <td>Show unverified email page</td>
                         </tr>
                         <tr>
                             <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
