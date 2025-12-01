@@ -83,6 +83,7 @@ After installation, you can customize the package by editing `config/tyro-login.
     'after_login' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', '/'),
     'after_logout' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGOUT', '/login'),
     'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/'),
+    'after_email_verification' => env('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', '/login'),
 ],
 ```
 
@@ -108,13 +109,18 @@ When email verification is enabled, users won't be logged in automatically after
 'verification' => [
     'expire' => env('TYRO_LOGIN_VERIFICATION_EXPIRE', 60), // Token expires in 60 minutes
 ],
+
+'redirects' => [
+    'after_email_verification' => env('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', '/login'),
+],
 ```
 
 **How it works:**
 1. User registers - Redirected to verification notice page
 2. Verification URL is logged to Laravel logs and error_log (for development)
-3. User clicks the link - Email is verified and user is logged in
+3. User clicks the link - Email is verified and user is redirected to login page
 4. Users can request a new verification email from the notice page
+5. If user tries to login with unverified email, they see "Email Not Verified" page
 
 **For Development:** The verification URL is printed to your Laravel logs and error_log, so you can easily test without setting up email.
 
@@ -347,6 +353,7 @@ Tyro Login registers the following routes:
 | GET/POST | `/logout` | `tyro-login.logout` | Handle logout |
 | GET | `/lockout` | `tyro-login.lockout` | Show lockout page |
 | GET | `/email/verify` | `tyro-login.verification.notice` | Show verification notice |
+| GET | `/email/not-verified` | `tyro-login.verification.not-verified` | Show unverified email page |
 | GET | `/email/verify/{token}` | `tyro-login.verification.verify` | Verify email |
 | POST | `/email/resend` | `tyro-login.verification.resend` | Resend verification email |
 | GET | `/forgot-password` | `tyro-login.password.request` | Show forgot password form |

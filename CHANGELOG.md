@@ -2,6 +2,18 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [1.2.1] - 2025-12-01
+
+### Added
+- **Email Verification Redirect** - New config option `TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION` to control where users are redirected after verifying their email (defaults to `/login`)
+- **Unverified Email Login Handling** - When `TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION` is enabled, users with unverified emails attempting to login are now shown a dedicated "Email Not Verified" page instead of being logged in
+- **New "Email Not Verified" Page** - Beautiful dedicated page for unverified users with option to resend verification email
+- **Customizable Page Content** - New config options for `email_not_verified` page titles and descriptions
+
+### Changed
+- Email verification no longer auto-logs in users - they are redirected to login page after verification
+- Login attempts with unverified email no longer resend verification email automatically (users can manually resend from the page)
+
 ## [1.2.0] - 2025-12-01
 
 ### Added
