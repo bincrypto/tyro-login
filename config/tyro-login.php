@@ -6,7 +6,7 @@ return [
     | Tyro Login Version
     |--------------------------------------------------------------------------
     */
-    'version' => '1.2.0',
+    'version' => '1.3.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -26,11 +26,13 @@ return [
     |--------------------------------------------------------------------------
     |
     | Choose the layout style for the authentication pages.
-    | Options: 'centered', 'split-left', 'split-right'
+    | Options: 'centered', 'split-left', 'split-right', 'fullscreen', 'card'
     |
     | - centered: Form in the center of the page
     | - split-left: Two-column layout with background image on left, form on right
     | - split-right: Two-column layout with form on left, background image on right
+    | - fullscreen: Full-screen background with glassmorphism form overlay
+    | - card: Floating card design with subtle background pattern
     |
     */
     'layout' => env('TYRO_LOGIN_LAYOUT', 'centered'),
