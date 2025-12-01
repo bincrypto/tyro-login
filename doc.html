@@ -281,6 +281,35 @@
             background: var(--color-bg-secondary);
         }
 
+        /* Environment Variables Table Styling */
+        .doc-section-subtitle {
+            margin-top: var(--spacing-2xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .doc-section-subtitle:first-of-type {
+            margin-top: var(--spacing-lg);
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .doc-table code.doc-inline-code {
+            font-size: 0.875em;
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            .doc-table {
+                font-size: 0.875rem;
+            }
+            
+            .doc-table th,
+            .doc-table td {
+                padding: var(--spacing-sm);
+            }
+        }
+
         .doc-back-link {
             display: inline-flex;
             align-items: center;
@@ -543,7 +572,7 @@
                     <div class="doc-nav-title">Customization</div>
                     <ul class="doc-nav-list">
                         <li><a href="#publishing" class="doc-nav-link">Publishing Assets</a></li>
-                        <li><a href="#env-variables" class="doc-nav-link">Environment Variables</a></li>
+                        <li><a href="#env-variables" class="doc-nav-link">Config Variables</a></li>
                         <li><a href="#artisan-commands" class="doc-nav-link">Artisan Commands</a></li>
                     </ul>
                 </div>
@@ -1308,72 +1337,654 @@ class User extends Authenticatable
             <!-- Environment Variables -->
             <section id="env-variables" class="doc-section">
                 <h2 class="doc-section-title">Environment Variables</h2>
-                <p class="doc-text">Complete list of environment variables you can use:</p>
+                <p class="doc-text">Complete list of environment variables you can use to customize Tyro Login:</p>
 
-                <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">.env</span>
-                    </div>
-                    <pre><code class="language-bash"># Layout & Appearance
-TYRO_LOGIN_LAYOUT=centered
-TYRO_LOGIN_BACKGROUND_IMAGE=https://...
+                <!-- Layout & Appearance -->
+                <h3 class="doc-section-subtitle">Layout & Appearance</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LAYOUT</code></td>
+                            <td>Layout style for authentication pages (centered, split-left, split-right)</td>
+                            <td><code class="doc-inline-code">centered</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_BACKGROUND_IMAGE</code></td>
+                            <td>Background image URL for split layouts</td>
+                            <td><code class="doc-inline-code">https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Branding
-TYRO_LOGIN_APP_NAME="My Application"
-TYRO_LOGIN_LOGO=https://myapp.com/logo.png
-TYRO_LOGIN_LOGO_HEIGHT=48px
+                <!-- Branding -->
+                <h3 class="doc-section-subtitle">Branding</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_APP_NAME</code></td>
+                            <td>Application name shown on auth pages</td>
+                            <td><code class="doc-inline-code">APP_NAME</code> or <code class="doc-inline-code">Laravel</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOGO</code></td>
+                            <td>URL to your logo (null for text-based logo)</td>
+                            <td><code class="doc-inline-code">null</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOGO_HEIGHT</code></td>
+                            <td>Logo height for proper sizing</td>
+                            <td><code class="doc-inline-code">48px</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Redirects
-TYRO_LOGIN_REDIRECT_AFTER_LOGIN=/dashboard
-TYRO_LOGIN_REDIRECT_AFTER_LOGOUT=/login
-TYRO_LOGIN_REDIRECT_AFTER_REGISTER=/dashboard
-TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION=/login
+                <!-- Routes & Redirects -->
+                <h3 class="doc-section-subtitle">Routes & Redirects</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_ROUTE_PREFIX</code></td>
+                            <td>Add a prefix to all routes</td>
+                            <td><code class="doc-inline-code">""</code> (empty)</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REDIRECT_AFTER_LOGIN</code></td>
+                            <td>Where to redirect after successful login</td>
+                            <td><code class="doc-inline-code">/</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REDIRECT_AFTER_LOGOUT</code></td>
+                            <td>Where to redirect after logout</td>
+                            <td><code class="doc-inline-code">/login</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REDIRECT_AFTER_REGISTER</code></td>
+                            <td>Where to redirect after successful registration</td>
+                            <td><code class="doc-inline-code">/</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION</code></td>
+                            <td>Where to redirect after email verification</td>
+                            <td><code class="doc-inline-code">/login</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Registration
-TYRO_LOGIN_REGISTRATION_ENABLED=true
-TYRO_LOGIN_REGISTRATION_AUTO_LOGIN=true
-TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION=false
+                <!-- Registration Settings -->
+                <h3 class="doc-section-subtitle">Registration Settings</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REGISTRATION_ENABLED</code></td>
+                            <td>Enable or disable user registration</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REGISTRATION_AUTO_LOGIN</code></td>
+                            <td>Automatically log in users after registration</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION</code></td>
+                            <td>Require email verification after registration</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Math Captcha
-TYRO_LOGIN_CAPTCHA_LOGIN=false
-TYRO_LOGIN_CAPTCHA_REGISTER=false
+                <!-- Login Field Configuration -->
+                <h3 class="doc-section-subtitle">Login Field Configuration</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_FIELD</code></td>
+                            <td>The field used for login (email, username, both)</td>
+                            <td><code class="doc-inline-code">email</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Login OTP
-TYRO_LOGIN_OTP_ENABLED=false
-TYRO_LOGIN_OTP_LENGTH=4
-TYRO_LOGIN_OTP_EXPIRE=5
-TYRO_LOGIN_OTP_MAX_RESEND=3
-TYRO_LOGIN_OTP_RESEND_COOLDOWN=60
+                <!-- Password Rules -->
+                <h3 class="doc-section-subtitle">Password Rules</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_PASSWORD_MIN_LENGTH</code></td>
+                            <td>Minimum password length for registration</td>
+                            <td><code class="doc-inline-code">8</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_PASSWORD_REQUIRE_CONFIRMATION</code></td>
+                            <td>Require password confirmation on registration</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Lockout Protection
-TYRO_LOGIN_LOCKOUT_ENABLED=true
-TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS=5
-TYRO_LOGIN_LOCKOUT_DURATION=15
+                <!-- Features -->
+                <h3 class="doc-section-subtitle">Features</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REMEMBER_ME</code></td>
+                            <td>Show "Remember Me" checkbox on login form</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_FORGOT_PASSWORD</code></td>
+                            <td>Show "Forgot Password" link on login form</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Email Verification
-TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION=false
-TYRO_LOGIN_VERIFICATION_EXPIRE=60
+                <!-- Page Content (Login) -->
+                <h3 class="doc-section-subtitle">Page Content (Login)</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_BG_TITLE</code></td>
+                            <td>Background title for login page</td>
+                            <td><code class="doc-inline-code">Welcome Back!</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_BG_DESCRIPTION</code></td>
+                            <td>Background description for login page</td>
+                            <td><code class="doc-inline-code">Sign in to access your account and continue where you left off. We're glad to see you again.</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Password Reset
-TYRO_LOGIN_FORGOT_PASSWORD=true
-TYRO_LOGIN_PASSWORD_RESET_EXPIRE=60
+                <!-- Page Content (Registration) -->
+                <h3 class="doc-section-subtitle">Page Content (Registration)</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REGISTER_BG_TITLE</code></td>
+                            <td>Background title for registration page</td>
+                            <td><code class="doc-inline-code">Join Us Today!</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_REGISTER_BG_DESCRIPTION</code></td>
+                            <td>Background description for registration page</td>
+                            <td><code class="doc-inline-code">Create your account and start your journey with us. It only takes a minute to get started.</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Emails
-TYRO_LOGIN_EMAIL_OTP=true
-TYRO_LOGIN_EMAIL_PASSWORD_RESET=true
-TYRO_LOGIN_EMAIL_VERIFY=true
-TYRO_LOGIN_EMAIL_WELCOME=true
+                <!-- Page Content (Email Verification) -->
+                <h3 class="doc-section-subtitle">Page Content (Email Verification)</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_VERIFY_EMAIL_TITLE</code></td>
+                            <td>Title for email verification page</td>
+                            <td><code class="doc-inline-code">Verify Your Email</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE</code></td>
+                            <td>Subtitle for email verification page</td>
+                            <td><code class="doc-inline-code">We've sent a verification link to your email address.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE</code></td>
+                            <td>Background title for email verification page</td>
+                            <td><code class="doc-inline-code">Check Your Email</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION</code></td>
+                            <td>Background description for email verification page</td>
+                            <td><code class="doc-inline-code">We've sent a verification link to your email address. Click link to verify your account.</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Debug Mode
-TYRO_LOGIN_DEBUG=false
+                <!-- Page Content (Forgot/Reset Password) -->
+                <h3 class="doc-section-subtitle">Page Content (Forgot/Reset Password)</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_FORGOT_PASSWORD_TITLE</code></td>
+                            <td>Title for forgot password page</td>
+                            <td><code class="doc-inline-code">Forgot Password?</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE</code></td>
+                            <td>Subtitle for forgot password page</td>
+                            <td><code class="doc-inline-code">Enter your email and we'll send you a reset link.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_FORGOT_PASSWORD_BG_TITLE</code></td>
+                            <td>Background title for forgot password page</td>
+                            <td><code class="doc-inline-code">Forgot Your Password?</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_FORGOT_PASSWORD_BG_DESCRIPTION</code></td>
+                            <td>Background description for forgot password page</td>
+                            <td><code class="doc-inline-code">No worries! Enter your email and we'll send you a link to reset your password.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_RESET_PASSWORD_TITLE</code></td>
+                            <td>Title for reset password page</td>
+                            <td><code class="doc-inline-code">Reset Password</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_RESET_PASSWORD_SUBTITLE</code></td>
+                            <td>Subtitle for reset password page</td>
+                            <td><code class="doc-inline-code">Enter your new password below.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_RESET_PASSWORD_BG_TITLE</code></td>
+                            <td>Background title for reset password page</td>
+                            <td><code class="doc-inline-code">Reset Your Password</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION</code></td>
+                            <td>Background description for reset password page</td>
+                            <td><code class="doc-inline-code">Create a new secure password for your account.</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Tyro Integration
-TYRO_LOGIN_ASSIGN_DEFAULT_ROLE=true
-TYRO_LOGIN_DEFAULT_ROLE_SLUG=user
+                <!-- Math Captcha -->
+                <h3 class="doc-section-subtitle">Math Captcha</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_CAPTCHA_LOGIN</code></td>
+                            <td>Enable captcha on login form</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_CAPTCHA_REGISTER</code></td>
+                            <td>Enable captcha on registration form</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_CAPTCHA_LABEL</code></td>
+                            <td>Label shown above the captcha input</td>
+                            <td><code class="doc-inline-code">Security Check</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_CAPTCHA_PLACEHOLDER</code></td>
+                            <td>Placeholder text for the captcha input</td>
+                            <td><code class="doc-inline-code">Enter answer</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_CAPTCHA_ERROR</code></td>
+                            <td>Error message when captcha answer is incorrect</td>
+                            <td><code class="doc-inline-code">Incorrect answer. Please try again.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_CAPTCHA_MIN</code></td>
+                            <td>Minimum number for math operation</td>
+                            <td><code class="doc-inline-code">1</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_CAPTCHA_MAX</code></td>
+                            <td>Maximum number for math operation</td>
+                            <td><code class="doc-inline-code">10</code></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-# Routes
-TYRO_LOGIN_ROUTE_PREFIX=</code></pre>
-                </div>
+                <!-- Login OTP -->
+                <h3 class="doc-section-subtitle">Login OTP</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_ENABLED</code></td>
+                            <td>Enable OTP verification for login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_LENGTH</code></td>
+                            <td>Number of digits in the OTP (4-8)</td>
+                            <td><code class="doc-inline-code">4</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_EXPIRE</code></td>
+                            <td>OTP expiration time in minutes</td>
+                            <td><code class="doc-inline-code">5</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_MAX_RESEND</code></td>
+                            <td>Maximum OTP resend attempts</td>
+                            <td><code class="doc-inline-code">3</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_RESEND_COOLDOWN</code></td>
+                            <td>Cooldown between resends in seconds</td>
+                            <td><code class="doc-inline-code">60</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_TITLE</code></td>
+                            <td>Page title for OTP verification</td>
+                            <td><code class="doc-inline-code">Enter Verification Code</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_SUBTITLE</code></td>
+                            <td>Page subtitle (supports :email and :length placeholders)</td>
+                            <td><code class="doc-inline-code">We've sent a :length-digit code to :email</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_LABEL</code></td>
+                            <td>Input label for OTP</td>
+                            <td><code class="doc-inline-code">Verification Code</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_PLACEHOLDER</code></td>
+                            <td>Input placeholder for OTP</td>
+                            <td><code class="doc-inline-code">Enter code</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_SUBMIT_BUTTON</code></td>
+                            <td>Submit button text</td>
+                            <td><code class="doc-inline-code">Verify</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_RESEND_BUTTON</code></td>
+                            <td>Resend button text</td>
+                            <td><code class="doc-inline-code">Resend Code</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_ERROR</code></td>
+                            <td>Error message when OTP is incorrect</td>
+                            <td><code class="doc-inline-code">Invalid or expired verification code.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_RESEND_SUCCESS</code></td>
+                            <td>Success message when OTP is resent</td>
+                            <td><code class="doc-inline-code">A new verification code has been sent to your email.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_MAX_RESEND_ERROR</code></td>
+                            <td>Error message when max resends reached</td>
+                            <td><code class="doc-inline-code">Maximum resend attempts reached. Please try logging in again.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_BG_TITLE</code></td>
+                            <td>Background title for OTP page</td>
+                            <td><code class="doc-inline-code">Almost There!</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_OTP_BG_DESCRIPTION</code></td>
+                            <td>Background description for OTP page</td>
+                            <td><code class="doc-inline-code">Enter the verification code we sent to your email to complete the login process.</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Email Configuration -->
+                <h3 class="doc-section-subtitle">Email Configuration</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_OTP</code></td>
+                            <td>Enable OTP verification email</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_OTP_SUBJECT</code></td>
+                            <td>Subject for OTP verification email</td>
+                            <td><code class="doc-inline-code">Your Verification Code</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_PASSWORD_RESET</code></td>
+                            <td>Enable password reset email</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_PASSWORD_RESET_SUBJECT</code></td>
+                            <td>Subject for password reset email</td>
+                            <td><code class="doc-inline-code">Reset Your Password</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_VERIFY</code></td>
+                            <td>Enable email verification email</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_VERIFY_SUBJECT</code></td>
+                            <td>Subject for email verification email</td>
+                            <td><code class="doc-inline-code">Verify Your Email Address</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_WELCOME</code></td>
+                            <td>Enable welcome email after registration</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_WELCOME_SUBJECT</code></td>
+                            <td>Subject for welcome email (supports :app_name placeholder)</td>
+                            <td><code class="doc-inline-code">null</code> (uses default with app name)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Lockout Protection -->
+                <h3 class="doc-section-subtitle">Lockout Protection</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOCKOUT_ENABLED</code></td>
+                            <td>Enable lockout protection</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS</code></td>
+                            <td>Number of failed attempts before lockout</td>
+                            <td><code class="doc-inline-code">3</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOCKOUT_DURATION</code></td>
+                            <td>Lockout duration in minutes</td>
+                            <td><code class="doc-inline-code">2</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SHOW_ATTEMPTS_LEFT</code></td>
+                            <td>Show remaining attempts after failed login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOCKOUT_AUTO_REDIRECT</code></td>
+                            <td>Auto-redirect to login page when countdown expires</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOCKOUT_MESSAGE</code></td>
+                            <td>Message shown on lockout page (supports :minutes placeholder)</td>
+                            <td><code class="doc-inline-code">Too many failed login attempts. Please try again in :minutes minutes.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOCKOUT_TITLE</code></td>
+                            <td>Lockout page title</td>
+                            <td><code class="doc-inline-code">Account Temporarily Locked</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_LOCKOUT_SUBTITLE</code></td>
+                            <td>Lockout page subtitle</td>
+                            <td><code class="doc-inline-code">For your security, we've temporarily locked your account.</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Tyro Integration -->
+                <h3 class="doc-section-subtitle">Tyro Integration</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_ASSIGN_DEFAULT_ROLE</code></td>
+                            <td>Assign default role to new users (requires Tyro package)</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_DEFAULT_ROLE_SLUG</code></td>
+                            <td>The role slug to assign to new users</td>
+                            <td><code class="doc-inline-code">user</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- User Model -->
+                <h3 class="doc-section-subtitle">User Model</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_USER_MODEL</code></td>
+                            <td>User model class path</td>
+                            <td><code class="doc-inline-code">App\Models\User</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Other Settings -->
+                <h3 class="doc-section-subtitle">Other Settings</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_DEBUG</code></td>
+                            <td>Enable debug logging for development</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_VERIFICATION_EXPIRE</code></td>
+                            <td>Email verification token expiration time in minutes</td>
+                            <td><code class="doc-inline-code">60</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_PASSWORD_RESET_EXPIRE</code></td>
+                            <td>Password reset token expiration time in minutes</td>
+                            <td><code class="doc-inline-code">60</code></td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
             <!-- Artisan Commands -->
