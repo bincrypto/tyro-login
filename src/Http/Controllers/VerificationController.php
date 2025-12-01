@@ -6,7 +6,6 @@ use HasinHayder\TyroLogin\Mail\VerifyEmailMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -35,6 +34,31 @@ class VerificationController extends Controller
             'pageContent' => config('tyro-login.pages.verify_email', [
                 'title' => 'Verify Your Email',
                 'subtitle' => 'We\'ve sent a verification link to your email address.',
+            ]),
+        ]);
+    }
+
+    /**
+     * Show the email not verified notice (for login attempts with unverified email).
+     */
+    public function showEmailNotVerified(Request $request): View|RedirectResponse
+    {
+        $email = $request->session()->get('tyro-login.verification.email');
+
+        if (!$email) {
+            return redirect()->route('tyro-login.login');
+        }
+
+        return view('tyro-login::email-not-verified', [
+            'layout' => config('tyro-login.layout', 'centered'),
+            'branding' => config('tyro-login.branding'),
+            'backgroundImage' => config('tyro-login.background_image'),
+            'email' => $email,
+            'pageContent' => config('tyro-login.pages.email_not_verified', [
+                'title' => 'Email Not Verified',
+                'subtitle' => 'Please verify your email address to continue.',
+                'background_title' => 'Email Verification Required',
+                'background_description' => 'Your email address needs to be verified before you can access your account.',
             ]),
         ]);
     }
@@ -121,11 +145,9 @@ class VerificationController extends Controller
         // Clear the session email
         $request->session()->forget('tyro-login.verification.email');
 
-        // Log the user in
-        Auth::login($user);
-
-        return redirect(config('tyro-login.redirects.after_register', '/'))
-            ->with('success', 'Your email has been verified successfully.');
+        // Redirect to the configured URL (default: login page)
+        return redirect(config('tyro-login.redirects.after_email_verification', '/login'))
+            ->with('success', 'Your email has been verified successfully. Please log in to continue.');
     }
 
     /**

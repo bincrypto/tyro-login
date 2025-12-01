@@ -41,6 +41,9 @@ Route::middleware('guest')->group(function () {
     Route::get('email/verify', [VerificationController::class, 'showVerificationNotice'])
         ->name('verification.notice');
     
+    Route::get('email/not-verified', [VerificationController::class, 'showEmailNotVerified'])
+        ->name('verification.not-verified');
+    
     Route::get('email/verify/{token}', [VerificationController::class, 'verify'])
         ->name('verification.verify');
     

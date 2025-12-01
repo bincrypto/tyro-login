@@ -122,10 +122,23 @@ class LoginController extends Controller
 
             $this->clearLockout($request);
 
+            $user = Auth::user();
+
+            // Check if email verification is required and email is not verified
+            if (config('tyro-login.registration.require_email_verification', false) && !$user->hasVerifiedEmail()) {
+                // Log the user out - they need to verify first
+                Auth::logout();
+
+                // Store email in session for verification page
+                $request->session()->put('tyro-login.verification.email', $user->email);
+
+                // Redirect to email-not-verified page (don't resend verification email)
+                return redirect()->route('tyro-login.verification.not-verified');
+            }
+
             // Check if OTP is enabled
             if (config('tyro-login.otp.enabled', false)) {
                 // Store user ID in session for OTP verification
-                $user = Auth::user();
                 Auth::logout();
                 
                 $request->session()->put('tyro-login.otp.user_id', $user->id);

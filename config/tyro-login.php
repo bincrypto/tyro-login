@@ -82,6 +82,7 @@ return [
         'after_login' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', '/'),
         'after_logout' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGOUT', '/login'),
         'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/'),
+        'after_email_verification' => env('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', '/login'),
     ],
 
     /*
@@ -94,7 +95,7 @@ return [
         'enabled' => env('TYRO_LOGIN_REGISTRATION_ENABLED', true),
 
         // Whether to automatically log in the user after registration
-        'auto_login' => env('TYRO_LOGIN_REGISTRATION_AUTO_LOGIN', true),
+        'auto_login' => env('TYRO_LOGIN_REGISTRATION_AUTO_LOGIN', false),
 
         // Whether to require email verification after registration
         'require_email_verification' => env('TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION', false),
@@ -181,6 +182,12 @@ return [
             'subtitle' => env('TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE', 'We\'ve sent a verification link to your email address.'),
             'background_title' => env('TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE', 'Check Your Email'),
             'background_description' => env('TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION', 'We\'ve sent a verification link to your email address. Click the link to verify your account.'),
+        ],
+        'email_not_verified' => [
+            'title' => env('TYRO_LOGIN_EMAIL_NOT_VERIFIED_TITLE', 'Email Not Verified'),
+            'subtitle' => env('TYRO_LOGIN_EMAIL_NOT_VERIFIED_SUBTITLE', 'Please verify your email address to continue.'),
+            'background_title' => env('TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_TITLE', 'Email Verification Required'),
+            'background_description' => env('TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_DESCRIPTION', 'Your email address needs to be verified before you can access your account.'),
         ],
         'forgot_password' => [
             'title' => env('TYRO_LOGIN_FORGOT_PASSWORD_TITLE', 'Forgot Password?'),
