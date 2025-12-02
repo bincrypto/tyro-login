@@ -18,7 +18,7 @@
 
 -   **Multiple Layouts** - 5 beautiful layouts: centered, split-left, split-right, fullscreen, and card
 -   **Beautiful Design** - Modern, professional UI out of the box
--   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, and GitLab
+-   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack
 -   **Highly Configurable** - Customize colors, logos, redirects, and more
 -   **Secure by Default** - Lockout protection, CSRF protection, and proper validation
 -   **Math Captcha** - Simple addition/subtraction captcha for login and registration
@@ -305,6 +305,7 @@ Tyro Login supports OAuth authentication using Laravel Socialite. Users can sign
 - LinkedIn
 - Bitbucket
 - GitLab
+- Slack
 
 #### Installation
 
@@ -374,6 +375,13 @@ Add credentials to `config/services.php`:
     'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
     'redirect' => env('LINKEDIN_REDIRECT_URI'),
 ],
+
+// For Slack (OpenID Connect)
+'slack-openid' => [
+    'client_id' => env('SLACK_CLIENT_ID'),
+    'client_secret' => env('SLACK_CLIENT_SECRET'),
+    'redirect' => env('SLACK_REDIRECT_URI'),
+],
 ```
 
 4. **Add Environment Variables:**
@@ -393,6 +401,11 @@ GITHUB_REDIRECT_URI="${APP_URL}/auth/github/callback"
 FACEBOOK_CLIENT_ID=your-client-id
 FACEBOOK_CLIENT_SECRET=your-client-secret
 FACEBOOK_REDIRECT_URI="${APP_URL}/auth/facebook/callback"
+
+# Slack
+SLACK_CLIENT_ID=your-client-id
+SLACK_CLIENT_SECRET=your-client-secret
+SLACK_REDIRECT_URI="${APP_URL}/auth/slack/callback"
 ```
 
 #### Social Login Behavior
@@ -407,6 +420,10 @@ FACEBOOK_REDIRECT_URI="${APP_URL}/auth/facebook/callback"
     // Automatically create new users from social login
     'auto_register' => env('TYRO_LOGIN_SOCIAL_AUTO_REGISTER', true),
     
+    // Automatically verify user email after social login/register
+    // Social providers confirm email ownership, so we can trust the email
+    'auto_verify_email' => env('TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL', true),
+    
     // Text shown above social buttons
     'divider_text' => env('TYRO_LOGIN_SOCIAL_DIVIDER', 'Or continue with'),
 ],
@@ -420,6 +437,10 @@ FACEBOOK_REDIRECT_URI="${APP_URL}/auth/facebook/callback"
 4. If user has linked social account → Log them in
 5. If user email exists and linking is enabled → Link social account and log in
 6. If user doesn't exist and auto-register is enabled → Create new user and log in
+
+**Automatic Email Verification:**
+
+When users authenticate via social login, their email is automatically marked as verified (if `auto_verify_email` is enabled). This is because OAuth providers confirm email ownership during the authentication process, so we can trust the email address provided.
 
 **Social Accounts Table:**
 
@@ -542,11 +563,48 @@ Tyro Login provides several artisan commands:
 | Command                                   | Description                                        |
 | ----------------------------------------- | -------------------------------------------------- |
 | `php artisan tyro-login:install`          | Install the package and publish configuration      |
+| `php artisan tyro-login:install --with-social` | Install with social login (Laravel Socialite) support |
 | `php artisan tyro-login:publish`          | Publish config, views, email templates, and assets |
 | `php artisan tyro-login:publish --emails` | Publish only email templates                       |
+| `php artisan tyro-login:verify-user`      | Mark a user's email as verified                    |
+| `php artisan tyro-login:unverify-user`    | Remove email verification from a user              |
 | `php artisan tyro-login:version`          | Display the current Tyro Login version             |
 | `php artisan tyro-login:doc`              | Open the documentation in your browser             |
 | `php artisan tyro-login:star`             | Open GitHub repository to star the project         |
+
+### User Verification Commands
+
+Tyro Login provides commands to manually verify or unverify user email addresses.
+
+**Verify a single user by email:**
+```bash
+php artisan tyro-login:verify-user john@example.com
+```
+
+**Verify a single user by ID:**
+```bash
+php artisan tyro-login:verify-user 123
+```
+
+**Verify all unverified users:**
+```bash
+php artisan tyro-login:verify-user --all
+```
+
+**Unverify a single user:**
+```bash
+php artisan tyro-login:unverify-user john@example.com
+```
+
+**Unverify all verified users:**
+```bash
+php artisan tyro-login:unverify-user --all
+```
+
+These commands are useful for:
+- Manually verifying users during development or testing
+- Bulk verification of imported users
+- Resetting verification status for testing email flows
 
 ## Routes
 

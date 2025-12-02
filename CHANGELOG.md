@@ -2,12 +2,31 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [1.5.0] - 2025-12-02
+
+### Added
+
+-   **Automatic Email Verification via Social Login** - Users who authenticate via social login now have their email automatically marked as verified
+    -   OAuth providers confirm email ownership, so we can trust the email address
+    -   Configurable via `TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL` (enabled by default)
+    -   Works for new users, returning users, and existing users linking social accounts
+-   **User Verification Commands** - New Artisan commands to manually manage user email verification
+    -   `php artisan tyro-login:verify-user {email|id}` - Verify a single user
+    -   `php artisan tyro-login:verify-user --all` - Verify all unverified users
+    -   `php artisan tyro-login:unverify-user {email|id}` - Unverify a single user
+    -   `php artisan tyro-login:unverify-user --all` - Unverify all verified users
+
+### Changed
+
+-   Updated social login configuration to include `auto_verify_email` option
+-   Social login now triggers email verification for all authentication scenarios
+
 ## [1.4.0] - 2025-12-02
 
 ### Added
 
 -   **Social Login (OAuth)** - Sign in with popular social providers using Laravel Socialite
-    -   Support for Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, and GitLab
+    -   Support for Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack
     -   Beautiful social login buttons integrated into login and registration pages
     -   Automatic account linking when email matches existing user
     -   Auto-register new users from social login (configurable)
