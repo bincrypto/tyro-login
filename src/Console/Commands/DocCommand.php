@@ -19,7 +19,7 @@ class DocCommand extends Command
     /**
      * The documentation URL.
      */
-    protected string $docUrl = 'https://hasinhayder.github.io/tyro/tyro-login/doc.html';
+    protected string $docUrl = 'https://hasinhayder.github.io/tyro-login/doc.html';
 
     /**
      * Execute the console command.
