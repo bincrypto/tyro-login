@@ -42,13 +42,13 @@
     .social-divider::after {
         content: '';
         flex: 1;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border);
     }
 
     .social-divider span {
         padding: 0 1rem;
         font-size: 0.8125rem;
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
         white-space: nowrap;
     }
 
@@ -70,17 +70,17 @@
         font-weight: 500;
         font-family: inherit;
         border-radius: 0.5rem;
-        border: 1px solid var(--border-color);
-        background-color: var(--bg-primary);
-        color: var(--text-primary);
+        border: 1px solid var(--border);
+        background-color: var(--background);
+        color: var(--foreground);
         text-decoration: none;
         cursor: pointer;
         transition: all 0.15s ease;
     }
 
     .social-btn:hover {
-        background-color: var(--bg-secondary);
-        border-color: var(--input-focus-border);
+        background-color: var(--muted);
+        border-color: var(--ring);
         transform: translateY(-2px);
     }
 
@@ -148,10 +148,10 @@
     .social-error {
         margin-top: 1rem;
         padding: 0.75rem 1rem;
-        background-color: var(--error-bg);
-        border: 1px solid var(--error-border);
+        background-color: color-mix(in srgb, var(--destructive), transparent 90%);
+        border: 1px solid var(--destructive);
         border-radius: 0.5rem;
-        color: var(--error-color);
+        color: var(--destructive);
         font-size: 0.875rem;
         text-align: center;
     }

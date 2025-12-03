@@ -33,27 +33,6 @@
         --sidebar-accent-foreground: oklch(0.205 0 0);
         --sidebar-border: oklch(0.922 0 0);
         --sidebar-ring: oklch(0.708 0 0);
-
-        /* Mappings */
-        --bg-primary: var(--background);
-        --bg-secondary: var(--muted);
-        --text-primary: var(--foreground);
-        --text-secondary: var(--muted-foreground);
-        --text-muted: var(--muted-foreground);
-        --border-color: var(--border);
-        --input-bg: var(--background);
-        --input-border: var(--input);
-        --input-focus-border: var(--ring);
-        --btn-primary-bg: var(--primary);
-        --btn-primary-text: var(--primary-foreground);
-        --btn-primary-hover: var(--primary);
-        --link-color: var(--primary);
-        --link-hover: var(--primary);
-        --error-color: var(--destructive);
-        --error-bg: color-mix(in srgb, var(--destructive), transparent 90%);
-        --error-border: var(--destructive);
-        --checkbox-border: var(--border);
-        --checkbox-checked-bg: var(--primary);
     }
 
     html.dark {
@@ -100,10 +79,10 @@
 
     body {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        background-color: var(--bg-secondary);
+        background-color: var(--muted);
         min-height: 100vh;
         line-height: 1.6;
-        color: var(--text-primary);
+        color: var(--foreground);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         transition: background-color 0.2s ease, color 0.2s ease;
@@ -191,7 +170,7 @@
         .auth-container.split-right .form-panel {
         flex: 1;
         max-width: 50%;
-        background-color: var(--bg-primary);
+        background-color: var(--background);
         min-height: 100vh;
     }
 
@@ -230,7 +209,7 @@
     .logo-container .app-logo svg {
         width: 48px;
         height: 48px;
-        color: var(--text-primary);
+        color: var(--foreground);
     }
 
     /* Form Header */
@@ -242,13 +221,13 @@
     .form-header h2 {
         font-size: 1.5rem;
         font-weight: 600;
-        color: var(--text-primary);
+        color: var(--foreground);
         margin-bottom: 0.5rem;
         letter-spacing: -0.025em;
     }
 
     .form-header p {
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
         font-size: 0.9375rem;
     }
 
@@ -261,7 +240,7 @@
         display: block;
         font-size: 0.875rem;
         font-weight: 500;
-        color: var(--text-primary);
+        color: var(--foreground);
         margin-bottom: 0.5rem;
     }
 
@@ -270,29 +249,29 @@
         padding: 0.75rem 0.875rem;
         font-size: 0.9375rem;
         font-family: inherit;
-        border: 1px solid var(--input-border);
+        border: 1px solid var(--input);
         border-radius: 0.5rem;
-        background-color: var(--input-bg);
-        color: var(--text-primary);
+        background-color: var(--background);
+        color: var(--foreground);
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     .form-input::placeholder {
-        color: var(--text-muted);
+        color: var(--muted-foreground);
     }
 
     .form-input:focus {
         outline: none;
-        border-color: var(--input-focus-border);
-        box-shadow: 0 0 0 1px var(--input-focus-border);
+        border-color: var(--ring);
+        box-shadow: 0 0 0 1px var(--ring);
     }
 
     .form-input.is-invalid {
-        border-color: var(--error-color);
+        border-color: var(--destructive);
     }
 
     .form-input.is-invalid:focus {
-        box-shadow: 0 0 0 1px var(--error-color);
+        box-shadow: 0 0 0 1px var(--destructive);
     }
 
     /* Checkbox */
@@ -306,7 +285,7 @@
         width: 1rem;
         height: 1rem;
         border-radius: 0.25rem;
-        border: 1.5px solid var(--checkbox-border);
+        border: 1.5px solid var(--border);
         background-color: transparent;
         cursor: pointer;
         appearance: none;
@@ -316,8 +295,8 @@
     }
 
     .checkbox-input:checked {
-        background-color: var(--checkbox-checked-bg);
-        border-color: var(--checkbox-checked-bg);
+        background-color: var(--primary);
+        border-color: var(--primary);
     }
 
     .checkbox-input:checked::after {
@@ -327,19 +306,19 @@
         top: 1px;
         width: 5px;
         height: 9px;
-        border: solid var(--bg-primary);
+        border: solid var(--background);
         border-width: 0 2px 2px 0;
         transform: rotate(45deg);
     }
 
     html.dark .checkbox-input:checked::after {
-        border-color: var(--text-primary);
+        border-color: var(--foreground);
         border-color: #111827;
     }
 
     .checkbox-label {
         font-size: 0.875rem;
-        color: var(--text-primary);
+        color: var(--foreground);
         cursor: pointer;
         user-select: none;
     }
@@ -356,7 +335,7 @@
     /* Links */
     .form-link {
         font-size: 0.875rem;
-        color: var(--text-primary);
+        color: var(--foreground);
         text-decoration: underline;
         text-underline-offset: 2px;
         font-weight: 500;
@@ -364,7 +343,7 @@
     }
 
     .form-link:hover {
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
     }
 
     /* Buttons */
@@ -384,12 +363,13 @@
     }
 
     .btn-primary {
-        background-color: var(--btn-primary-bg);
-        color: var(--btn-primary-text);
+        background-color: var(--primary);
+        color: var(--primary-foreground);
     }
 
     .btn-primary:hover {
-        background-color: var(--btn-primary-hover);
+        background-color: var(--primary);
+        opacity: 0.9;
     }
 
     .btn-primary:active {
@@ -404,14 +384,14 @@
 
     /* Error Messages */
     .error-message {
-        color: var(--error-color);
+        color: var(--destructive);
         font-size: 0.8125rem;
         margin-top: 0.375rem;
     }
 
     .error-list {
-        background-color: var(--error-bg);
-        border: 1px solid var(--error-border);
+        background-color: color-mix(in srgb, var(--destructive), transparent 90%);
+        border: 1px solid var(--destructive);
         border-radius: 0.5rem;
         padding: 1rem;
         margin-bottom: 1.5rem;
@@ -424,7 +404,7 @@
     }
 
     .error-list li {
-        color: var(--error-color);
+        color: var(--destructive);
         font-size: 0.875rem;
         margin-bottom: 0.25rem;
     }
@@ -440,12 +420,12 @@
     }
 
     .form-footer p {
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
         font-size: 0.9375rem;
     }
 
     .form-footer .form-link {
-        color: var(--text-primary);
+        color: var(--foreground);
     }
 
     /* Theme Toggle */
@@ -456,9 +436,9 @@
         width: 2.5rem;
         height: 2.5rem;
         border-radius: 0.5rem;
-        border: 1px solid var(--border-color);
-        background-color: var(--bg-primary);
-        color: var(--text-primary);
+        border: 1px solid var(--border);
+        background-color: var(--background);
+        color: var(--foreground);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -468,7 +448,7 @@
     }
 
     .theme-toggle:hover {
-        background-color: var(--bg-secondary);
+        background-color: var(--muted);
     }
 
     .theme-toggle svg {
@@ -577,7 +557,7 @@
 
     /* Card Layout */
     .auth-container.card {
-        background-color: var(--bg-secondary);
+        background-color: var(--muted);
         position: relative;
         overflow: hidden;
     }
@@ -606,8 +586,8 @@
     }
 
     .auth-container.card .form-card {
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
+        background: var(--background);
+        border: 1px solid var(--border);
         border-radius: 1.25rem;
         padding: 3rem 2.5rem;
         box-shadow:

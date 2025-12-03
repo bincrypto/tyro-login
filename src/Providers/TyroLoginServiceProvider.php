@@ -5,6 +5,7 @@ namespace HasinHayder\TyroLogin\Providers;
 use HasinHayder\TyroLogin\Console\Commands\DocCommand;
 use HasinHayder\TyroLogin\Console\Commands\InstallCommand;
 use HasinHayder\TyroLogin\Console\Commands\PublishCommand;
+use HasinHayder\TyroLogin\Console\Commands\PublishStyleCommand;
 use HasinHayder\TyroLogin\Console\Commands\StarCommand;
 use HasinHayder\TyroLogin\Console\Commands\UnverifyUserCommand;
 use HasinHayder\TyroLogin\Console\Commands\VerifyUserCommand;
@@ -73,6 +74,11 @@ class TyroLoginServiceProvider extends ServiceProvider
             __DIR__ . '/../../resources/views/emails' => resource_path('views/vendor/tyro-login/emails'),
         ], 'tyro-login-emails');
 
+        // Publish styles
+        $this->publishes([
+            __DIR__ . '/../../resources/views/partials/styles.blade.php' => resource_path('views/vendor/tyro-login/partials/styles.blade.php'),
+        ], 'tyro-login-styles');
+
         // Publish assets
         $this->publishes([
             __DIR__ . '/../../resources/assets' => public_path('vendor/tyro-login'),
@@ -100,6 +106,7 @@ class TyroLoginServiceProvider extends ServiceProvider
         $this->commands([
             InstallCommand::class,
             PublishCommand::class,
+            PublishStyleCommand::class,
             VersionCommand::class,
             DocCommand::class,
             StarCommand::class,

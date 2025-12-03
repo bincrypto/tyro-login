@@ -91,19 +91,19 @@
         text-align: center;
         margin-bottom: 1.5rem;
         padding: 1rem;
-        background-color: var(--bg-secondary);
+        background-color: var(--muted);
         border-radius: 0.5rem;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border);
     }
 
     .email-notice p {
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
         font-size: 0.875rem;
         margin: 0;
     }
 
     .email-notice .email-address {
-        color: var(--text-primary);
+        color: var(--foreground);
         font-weight: 600;
         font-size: 1rem;
         margin-top: 0.25rem;

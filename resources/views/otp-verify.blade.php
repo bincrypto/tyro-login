@@ -137,26 +137,26 @@
         text-align: center;
         font-size: 1.5rem;
         font-weight: 600;
-        border: 1px solid var(--input-border);
+        border: 1px solid var(--input);
         border-radius: 0.5rem;
-        background-color: var(--input-bg);
-        color: var(--text-primary);
+        background-color: var(--background);
+        color: var(--foreground);
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     .otp-digit:focus {
         outline: none;
-        border-color: var(--input-focus-border);
-        box-shadow: 0 0 0 1px var(--input-focus-border);
+        border-color: var(--ring);
+        box-shadow: 0 0 0 1px var(--ring);
     }
 
     .otp-digit.is-invalid {
-        border-color: var(--error-color);
+        border-color: var(--destructive);
     }
 
     .otp-digit.filled {
-        border-color: var(--input-focus-border);
-        background-color: var(--bg-secondary);
+        border-color: var(--ring);
+        background-color: var(--muted);
     }
 
     .otp-actions {
@@ -169,7 +169,7 @@
     }
 
     .resend-text {
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
         font-size: 0.9375rem;
         margin: 0;
     }
@@ -183,19 +183,19 @@
     }
 
     .resend-count {
-        color: var(--text-muted);
+        color: var(--muted-foreground);
         font-size: 0.8125rem;
         margin-top: 0.5rem;
     }
 
     .resend-cooldown {
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
         font-size: 0.9375rem;
     }
 
     #cooldown-timer {
         font-weight: 600;
-        color: var(--text-primary);
+        color: var(--foreground);
     }
 
     .form-footer {

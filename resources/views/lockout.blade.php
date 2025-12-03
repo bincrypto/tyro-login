@@ -66,8 +66,8 @@
 
 <style>
     .lockout-message {
-        background-color: var(--error-bg);
-        border: 1px solid var(--error-border);
+        background-color: color-mix(in srgb, var(--destructive), transparent 90%);
+        border: 1px solid var(--destructive);
         border-radius: 0.5rem;
         padding: 1rem;
         margin-bottom: 1.5rem;
@@ -75,7 +75,7 @@
     }
 
     .lockout-message p {
-        color: var(--error-color);
+        color: var(--destructive);
         font-size: 0.9375rem;
         margin: 0;
         line-height: 1.5;
@@ -85,14 +85,14 @@
         text-align: center;
         margin-bottom: 1.5rem;
         padding: 1.25rem;
-        background-color: var(--bg-secondary);
+        background-color: var(--muted);
         border-radius: 0.5rem;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border);
     }
 
     .countdown-label {
         font-size: 0.8125rem;
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
         margin-bottom: 0.5rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -108,7 +108,7 @@
     .countdown-value {
         font-size: 2rem;
         font-weight: 700;
-        color: var(--text-primary);
+        color: var(--foreground);
         font-variant-numeric: tabular-nums;
         min-width: 3rem;
         text-align: center;
@@ -117,7 +117,7 @@
     .countdown-separator {
         font-size: 2rem;
         font-weight: 700;
-        color: var(--text-secondary);
+        color: var(--muted-foreground);
         animation: blink 1s infinite;
     }
 
@@ -136,7 +136,7 @@
 
     .countdown-expired .countdown-value,
     .countdown-expired .countdown-separator {
-        color: var(--text-muted);
+        color: var(--muted-foreground);
         animation: none;
     }
 

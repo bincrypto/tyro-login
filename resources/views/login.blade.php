@@ -146,12 +146,12 @@
         align-items: center;
         justify-content: center;
         padding: 0.75rem 1rem;
-        background-color: var(--bg-secondary);
-        border: 1px solid var(--border-color);
+        background-color: var(--muted);
+        border: 1px solid var(--border);
         border-radius: 0.5rem;
         font-weight: 600;
         font-size: 1rem;
-        color: var(--text-primary);
+        color: var(--foreground);
         white-space: nowrap;
         min-width: 100px;
         text-align: center;
