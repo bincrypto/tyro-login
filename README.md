@@ -556,6 +556,74 @@ php artisan tyro-login:publish
 
 This publishes config, views, email templates, and assets.
 
+### Theme Customization (shadcn Variables)
+
+Tyro Login uses [shadcn/ui](https://ui.shadcn.com) CSS variables for theming, making it easy to customize colors and integrate with shadcn-based projects.
+
+#### Publishing Theme Files
+
+Publish the theme variables to customize the look and feel:
+
+```bash
+# Publish only theme variables (recommended for color customization)
+php artisan tyro-login:publish-style --theme-only
+
+# Or publish complete styles (theme + component styles)
+php artisan tyro-login:publish-style
+```
+
+Theme files will be published to `resources/views/vendor/tyro-login/partials/`.
+
+#### Visual Theme Editing with tweakcn (free)
+
+The easiest way to customize your theme is using [tweakcn.com](https://tweakcn.com):
+
+1. Visit [tweakcn.com](https://tweakcn.com)
+2. Use the visual editor to create your perfect color palette
+3. Copy the generated CSS variables
+4. Publish your theme: `php artisan tyro-login:publish-style --theme-only`
+5. Paste the variables into `resources/views/vendor/tyro-login/partials/shadcn-theme.blade.php`
+
+Tyro Login uses standard shadcn CSS variables in oklch color format:
+
+```css
+:root {
+    --background: 100% 0 0;           /* Page background */
+    --foreground: 12.9% 0 0;          /* Default text color */
+    --card: 100% 0 0;                 /* Card backgrounds */
+    --card-foreground: 12.9% 0 0;     /* Card text */
+    --primary: 15.9% 0 0;             /* Primary buttons, links */
+    --primary-foreground: 100% 0 0;   /* Text on primary elements */
+    --secondary: 96.9% 0 0;           /* Secondary elements */
+    --muted: 96.9% 0 0;               /* Muted backgrounds */
+    --muted-foreground: 39.5% 0 0;    /* Muted text */
+    --accent: 96.9% 0 0;              /* Accent elements */
+    --destructive: 50.6% 0.213 27.518; /* Error/danger states */
+    --border: 91.4% 0 0;              /* Border colors */
+    --input: 91.4% 0 0;               /* Input borders */
+    --ring: 15.9% 0 0;                /* Focus rings */
+    --radius: 0.5rem;                 /* Border radius */
+}
+
+html.dark {
+    --background: 12.9% 0 0;          /* Dark mode background */
+    --foreground: 100% 0 0;           /* Dark mode text */
+    /* ... and more dark mode variables */
+}
+```
+
+#### Theme File Structure
+
+After publishing, your theme structure will be:
+
+```
+resources/views/vendor/tyro-login/partials/
+├── shadcn-theme.blade.php  # Theme variables (edit this!)
+└── styles.blade.php        # Component styles (includes theme)
+```
+
+The `shadcn-theme.blade.php` file contains only CSS variables, making it safe to edit without breaking component styles.
+
 ## Artisan Commands
 
 Tyro Login provides several artisan commands:
@@ -566,6 +634,8 @@ Tyro Login provides several artisan commands:
 | `php artisan tyro-login:install --with-social` | Install with social login (Laravel Socialite) support |
 | `php artisan tyro-login:publish`          | Publish config, views, email templates, and assets |
 | `php artisan tyro-login:publish --emails` | Publish only email templates                       |
+| `php artisan tyro-login:publish-style`    | Publish styles (theme + components)                |
+| `php artisan tyro-login:publish-style --theme-only` | Publish only theme variables           |
 | `php artisan tyro-login:verify-user`      | Mark a user's email as verified                    |
 | `php artisan tyro-login:unverify-user`    | Remove email verification from a user              |
 | `php artisan tyro-login:version`          | Display the current Tyro Login version             |

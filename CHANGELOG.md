@@ -2,10 +2,18 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
-## [1.5.0] - 2025-12-02
+## [1.5.0] - 2025-12-03
 
 ### Added
 
+-   **shadcn Theme Customization** - Full shadcn/ui theme variable support for easy customization
+    -   Uses standard shadcn CSS variables (oklch color format) for seamless compatibility
+    -   New `shadcn-theme.blade.php` partial file for isolated theme variables
+    -   Easy theme publishing with `php artisan tyro-login:publish-style --theme-only`
+    -   Visual theme editing support via [tweakcn.com](https://tweakcn.com)
+-   **Publish Style Command** - New Artisan command to publish and customize styles
+    -   `php artisan tyro-login:publish-style` - Publish complete styles (theme + components)
+    -   `php artisan tyro-login:publish-style --theme-only` - Publish only theme variables
 -   **Automatic Email Verification via Social Login** - Users who authenticate via social login now have their email automatically marked as verified
     -   OAuth providers confirm email ownership, so we can trust the email address
     -   Configurable via `TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL` (enabled by default)
@@ -15,11 +23,6 @@ All notable changes to `tyro-login` will be documented in this file.
     -   `php artisan tyro-login:verify-user --all` - Verify all unverified users
     -   `php artisan tyro-login:unverify-user {email|id}` - Unverify a single user
     -   `php artisan tyro-login:unverify-user --all` - Unverify all verified users
-
-### Changed
-
--   Updated social login configuration to include `auto_verify_email` option
--   Social login now triggers email verification for all authentication scenarios
 
 ## [1.4.0] - 2025-12-02
 
