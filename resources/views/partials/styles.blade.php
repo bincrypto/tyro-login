@@ -12,7 +12,7 @@
 
     body {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        background-color: var(--muted);
+        background-color: var(--background);
         min-height: 100vh;
         line-height: 1.6;
         color: var(--foreground);
@@ -490,7 +490,7 @@
 
     /* Card Layout */
     .auth-container.card {
-        background-color: var(--muted);
+        background-color: var(--muted); /*better than --background*/
         position: relative;
         overflow: hidden;
     }
