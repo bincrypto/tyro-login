@@ -6,7 +6,7 @@ return [
     | Tyro Login Version
     |--------------------------------------------------------------------------
     */
-    'version' => '1.5.0',
+    'version' => '1.6.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -90,12 +90,12 @@ return [
         // Your application name shown on all auth pages
         // Defaults to APP_NAME from Laravel config, or 'Laravel' if not set
         'app_name' => env('TYRO_LOGIN_APP_NAME', env('APP_NAME', 'Laravel')),
-        
+
         // Logo URL (recommended: SVG or high-res PNG)
         // Set to null to use text-based logo with app name
         // Example: 'https://yourapp.com/logo.svg' or '/images/logo.png'
         'logo' => env('TYRO_LOGIN_LOGO', null),
-        
+
         // Logo height for proper display scaling
         // Accepts any valid CSS height value (px, rem, etc.)
         // Common values: '32px', '48px', '3rem'
