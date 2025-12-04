@@ -13,24 +13,21 @@ use HasinHayder\TyroLogin\Console\Commands\VersionCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
-class TyroLoginServiceProvider extends ServiceProvider
-{
-    public function register(): void
-    {
+class TyroLoginServiceProvider extends ServiceProvider {
+    public function register(): void {
         $this->mergeConfigFrom(__DIR__ . '/../../config/tyro-login.php', 'tyro-login');
     }
 
-    public function boot(): void
-    {
+    public function boot(): void {
         $this->registerPublishing();
         $this->registerRoutes();
         $this->registerViews();
         $this->registerCommands();
         $this->registerMigrations();
+        $this->configureAuthRedirection();
     }
 
-    protected function registerRoutes(): void
-    {
+    protected function registerRoutes(): void {
         Route::group([
             'prefix' => config('tyro-login.routes.prefix', ''),
             'middleware' => config('tyro-login.routes.middleware', ['web']),
@@ -40,21 +37,18 @@ class TyroLoginServiceProvider extends ServiceProvider
         });
     }
 
-    protected function registerViews(): void
-    {
+    protected function registerViews(): void {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'tyro-login');
     }
 
-    protected function registerMigrations(): void
-    {
+    protected function registerMigrations(): void {
         // Only load migrations if social login is enabled
         if (config('tyro-login.social.enabled', false)) {
             $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
         }
     }
 
-    protected function registerPublishing(): void
-    {
+    protected function registerPublishing(): void {
         if (!$this->app->runningInConsole()) {
             return;
         }
@@ -103,8 +97,16 @@ class TyroLoginServiceProvider extends ServiceProvider
         ], 'tyro-login');
     }
 
-    protected function registerCommands(): void
-    {
+    protected function configureAuthRedirection(): void {
+        // Configure Laravel's authentication middleware to redirect to tyro-login route
+        $this->app->resolving(\Illuminate\Auth\Middleware\Authenticate::class, function ($authenticate) {
+            $authenticate->redirectUsing(function () {
+                return route('tyro-login.login');
+            });
+        });
+    }
+
+    protected function registerCommands(): void {
         if (!$this->app->runningInConsole()) {
             return;
         }
