@@ -13,13 +13,11 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class VerificationController extends Controller
-{
+class VerificationController extends Controller {
     /**
      * Show the email verification notice.
      */
-    public function showVerificationNotice(Request $request): View|RedirectResponse
-    {
+    public function showVerificationNotice(Request $request): View|RedirectResponse {
         $email = $request->session()->get('tyro-login.verification.email');
 
         if (!$email) {
@@ -32,17 +30,16 @@ class VerificationController extends Controller
             'backgroundImage' => config('tyro-login.background_image'),
             'email' => $email,
             'pageContent' => config('tyro-login.pages.verify_email', [
-                'title' => 'Verify Your Email',
-                'subtitle' => 'We\'ve sent a verification link to your email address.',
-            ]),
+                        'title' => 'Verify Your Email',
+                        'subtitle' => 'We\'ve sent a verification link to your email address.',
+                    ]),
         ]);
     }
 
     /**
      * Show the email not verified notice (for login attempts with unverified email).
      */
-    public function showEmailNotVerified(Request $request): View|RedirectResponse
-    {
+    public function showEmailNotVerified(Request $request): View|RedirectResponse {
         $email = $request->session()->get('tyro-login.verification.email');
 
         if (!$email) {
@@ -55,19 +52,18 @@ class VerificationController extends Controller
             'backgroundImage' => config('tyro-login.background_image'),
             'email' => $email,
             'pageContent' => config('tyro-login.pages.email_not_verified', [
-                'title' => 'Email Not Verified',
-                'subtitle' => 'Please verify your email address to continue.',
-                'background_title' => 'Email Verification Required',
-                'background_description' => 'Your email address needs to be verified before you can access your account.',
-            ]),
+                        'title' => 'Email Not Verified',
+                        'subtitle' => 'Please verify your email address to continue.',
+                        'background_title' => 'Email Verification Required',
+                        'background_description' => 'Your email address needs to be verified before you can access your account.',
+                    ]),
         ]);
     }
 
     /**
      * Generate a verification URL for the user.
      */
-    public static function generateVerificationUrl($user, bool $sendEmail = true): string
-    {
+    public static function generateVerificationUrl($user, bool $sendEmail = true): string {
         $token = Str::random(64);
         $expiresAt = now()->addMinutes(config('tyro-login.verification.expire', 60));
 
@@ -89,9 +85,10 @@ class VerificationController extends Controller
 
         // Log the verification URL for development (only if debug is enabled)
         if (config('tyro-login.debug', false)) {
-            Log::info('Tyro Login - Email Verification URL', [
-                'email' => $user->email,
-                'url' => $url,
+            Log::info('Tyro Login - Email Verification Link Generated', [
+                'user_id' => $user->id,
+                'email' => Str::mask($user->email, '*', 3),
+                'expires_in_minutes' => config('tyro-login.verification.expire', 60),
             ]);
         }
 
@@ -110,8 +107,7 @@ class VerificationController extends Controller
     /**
      * Verify the email address.
      */
-    public function verify(Request $request, string $token): RedirectResponse
-    {
+    public function verify(Request $request, string $token): RedirectResponse {
         // Validate signature
         if (!$request->hasValidSignature()) {
             return redirect()->route('tyro-login.login')
@@ -153,8 +149,7 @@ class VerificationController extends Controller
     /**
      * Resend the verification email.
      */
-    public function resend(Request $request): RedirectResponse
-    {
+    public function resend(Request $request): RedirectResponse {
         $email = $request->session()->get('tyro-login.verification.email');
 
         if (!$email) {

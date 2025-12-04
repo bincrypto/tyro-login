@@ -5,8 +5,7 @@ namespace HasinHayder\TyroLogin\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SocialAccount extends Model
-{
+class SocialAccount extends Model {
     /**
      * The table associated with the model.
      */
@@ -37,9 +36,10 @@ class SocialAccount extends Model
     /**
      * The attributes that should be cast.
      */
-    protected function casts(): array
-    {
+    protected function casts(): array {
         return [
+            'access_token' => 'encrypted',
+            'refresh_token' => 'encrypted',
             'token_expires_at' => 'datetime',
         ];
     }
@@ -47,8 +47,7 @@ class SocialAccount extends Model
     /**
      * Get the user that owns the social account.
      */
-    public function user(): BelongsTo
-    {
+    public function user(): BelongsTo {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         return $this->belongsTo($userModel);
     }
@@ -56,8 +55,7 @@ class SocialAccount extends Model
     /**
      * Find a social account by provider and provider user ID.
      */
-    public static function findByProvider(string $provider, string $providerUserId): ?self
-    {
+    public static function findByProvider(string $provider, string $providerUserId): ?self {
         return static::where('provider', $provider)
             ->where('provider_user_id', $providerUserId)
             ->first();

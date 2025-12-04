@@ -16,30 +16,27 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
-class PasswordResetController extends Controller
-{
+class PasswordResetController extends Controller {
     /**
      * Show the forgot password form.
      */
-    public function showForgotPasswordForm(): View
-    {
+    public function showForgotPasswordForm(): View {
         return view('tyro-login::forgot-password', [
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
             'loginField' => config('tyro-login.login_field', 'email'),
             'pageContent' => config('tyro-login.pages.forgot_password', [
-                'title' => 'Forgot Password?',
-                'subtitle' => 'Enter your email and we\'ll send you a reset link.',
-            ]),
+                        'title' => 'Forgot Password?',
+                        'subtitle' => 'Enter your email and we\'ll send you a reset link.',
+                    ]),
         ]);
     }
 
     /**
      * Send password reset link.
      */
-    public function sendResetLink(Request $request): RedirectResponse
-    {
+    public function sendResetLink(Request $request): RedirectResponse {
         $loginField = config('tyro-login.login_field', 'email');
 
         $request->validate([
@@ -74,8 +71,7 @@ class PasswordResetController extends Controller
     /**
      * Generate a password reset URL for the user.
      */
-    public function generateResetUrl($user): string
-    {
+    public function generateResetUrl($user): string {
         $token = Str::random(64);
         $expiresAt = now()->addMinutes(config('tyro-login.password_reset.expire', 60));
 
@@ -97,9 +93,10 @@ class PasswordResetController extends Controller
 
         // Log the reset URL for development (only if debug is enabled)
         if (config('tyro-login.debug', false)) {
-            Log::info('Tyro Login - Password Reset URL', [
-                'email' => $user->email,
-                'url' => $url,
+            Log::info('Tyro Login - Password Reset Link Generated', [
+                'user_id' => $user->id,
+                'email' => Str::mask($user->email, '*', 3),
+                'expires_in_minutes' => config('tyro-login.password_reset.expire', 60),
             ]);
         }
 
@@ -109,8 +106,7 @@ class PasswordResetController extends Controller
     /**
      * Show the password reset form.
      */
-    public function showResetForm(Request $request, string $token): View|RedirectResponse
-    {
+    public function showResetForm(Request $request, string $token): View|RedirectResponse {
         // Validate signature
         if (!$request->hasValidSignature()) {
             return redirect()->route('tyro-login.password.request')
@@ -132,17 +128,16 @@ class PasswordResetController extends Controller
             'token' => $token,
             'email' => $data['email'],
             'pageContent' => config('tyro-login.pages.reset_password', [
-                'title' => 'Reset Password',
-                'subtitle' => 'Enter your new password below.',
-            ]),
+                        'title' => 'Reset Password',
+                        'subtitle' => 'Enter your new password below.',
+                    ]),
         ]);
     }
 
     /**
      * Reset the password.
      */
-    public function reset(Request $request): RedirectResponse
-    {
+    public function reset(Request $request): RedirectResponse {
         $minLength = config('tyro-login.password.min_length', 8);
 
         $request->validate([

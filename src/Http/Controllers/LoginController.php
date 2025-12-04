@@ -14,13 +14,11 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
-class LoginController extends Controller
-{
+class LoginController extends Controller {
     /**
      * Show the login form.
      */
-    public function showLoginForm(Request $request): View|RedirectResponse
-    {
+    public function showLoginForm(Request $request): View|RedirectResponse {
         // Check if user is locked out
         if ($this->isLockedOut($request)) {
             return redirect()->route('tyro-login.lockout');
@@ -48,8 +46,7 @@ class LoginController extends Controller
     /**
      * Show the lockout page.
      */
-    public function showLockout(Request $request): View|RedirectResponse
-    {
+    public function showLockout(Request $request): View|RedirectResponse {
         // Check if user is still locked out
         if (!$this->isLockedOut($request)) {
             // Clear the lockout cache and redirect to login
@@ -81,18 +78,17 @@ class LoginController extends Controller
     /**
      * Handle a login request.
      */
-    public function login(Request $request): RedirectResponse
-    {
+    public function login(Request $request): RedirectResponse {
         // Check if user is locked out
         if ($this->isLockedOut($request)) {
             return redirect()->route('tyro-login.lockout');
         }
 
         $loginField = config('tyro-login.login_field', 'email');
-        
+
         // Get validation rules (includes captcha if enabled)
         $rules = $this->getValidationRules($loginField);
-        
+
         // Add captcha validation if enabled
         if (config('tyro-login.captcha.enabled_login', false)) {
             $rules['captcha_answer'] = ['required', 'numeric'];
@@ -114,7 +110,7 @@ class LoginController extends Controller
             if (!$this->validateCaptcha($request, 'login', $credentials['captcha_answer'])) {
                 // Regenerate captcha for next attempt
                 $this->generateCaptcha($request, 'login');
-                
+
                 throw ValidationException::withMessages([
                     'captcha_answer' => config('tyro-login.captcha.error_message', 'Incorrect answer. Please try again.'),
                 ]);
@@ -122,8 +118,8 @@ class LoginController extends Controller
             unset($credentials['captcha_answer']);
         }
 
-        $remember = config('tyro-login.features.remember_me', true) 
-            ? $request->boolean('remember') 
+        $remember = config('tyro-login.features.remember_me', true)
+            ? $request->boolean('remember')
             : false;
 
         // Remove remember from credentials if it exists
@@ -150,15 +146,21 @@ class LoginController extends Controller
 
             // Check if OTP is enabled
             if (config('tyro-login.otp.enabled', false)) {
-                // Store user ID in session for OTP verification
+                // Store user ID and remember preference before logout
+                $userId = $user->id;
+                $rememberPreference = $remember;
+
+                // Log the user out and regenerate session to prevent session fixation
                 Auth::logout();
-                
-                $request->session()->put('tyro-login.otp.user_id', $user->id);
-                $request->session()->put('tyro-login.otp.remember', $remember);
-                
+                $request->session()->regenerate();
+
+                // Store data in the new session
+                $request->session()->put('tyro-login.otp.user_id', $userId);
+                $request->session()->put('tyro-login.otp.remember', $rememberPreference);
+
                 // Generate and send OTP
                 $this->generateAndSendOtp($request, $user);
-                
+
                 return redirect()->route('tyro-login.otp.verify');
             }
 
@@ -180,7 +182,7 @@ class LoginController extends Controller
 
         // Build error message with remaining attempts if configured
         $errorMessage = __('auth.failed');
-        
+
         if (config('tyro-login.lockout.enabled', true) && config('tyro-login.lockout.show_attempts_left', false)) {
             $attemptsLeft = $this->getRemainingAttempts($request);
             if ($attemptsLeft > 0) {
@@ -203,8 +205,7 @@ class LoginController extends Controller
     /**
      * Show the OTP verification form.
      */
-    public function showOtpForm(Request $request): View|RedirectResponse
-    {
+    public function showOtpForm(Request $request): View|RedirectResponse {
         // Check if we have a pending OTP verification
         if (!$request->session()->has('tyro-login.otp.user_id')) {
             return redirect()->route('tyro-login.login');
@@ -254,8 +255,7 @@ class LoginController extends Controller
     /**
      * Verify the OTP.
      */
-    public function verifyOtp(Request $request): RedirectResponse
-    {
+    public function verifyOtp(Request $request): RedirectResponse {
         // Check if we have a pending OTP verification
         if (!$request->session()->has('tyro-login.otp.user_id')) {
             return redirect()->route('tyro-login.login');
@@ -303,8 +303,7 @@ class LoginController extends Controller
     /**
      * Resend the OTP.
      */
-    public function resendOtp(Request $request): RedirectResponse
-    {
+    public function resendOtp(Request $request): RedirectResponse {
         // Check if we have a pending OTP verification
         if (!$request->session()->has('tyro-login.otp.user_id')) {
             return redirect()->route('tyro-login.login');
@@ -351,24 +350,22 @@ class LoginController extends Controller
     /**
      * Cancel OTP verification and return to login.
      */
-    public function cancelOtp(Request $request): RedirectResponse
-    {
+    public function cancelOtp(Request $request): RedirectResponse {
         // Clear OTP session data
         if ($request->session()->has('tyro-login.otp.user_id')) {
             $userId = $request->session()->get('tyro-login.otp.user_id');
             Cache::forget($this->getOtpCacheKey($userId));
         }
-        
+
         $request->session()->forget('tyro-login.otp');
-        
+
         return redirect()->route('tyro-login.login');
     }
 
     /**
      * Log the user out.
      */
-    public function logout(Request $request): RedirectResponse
-    {
+    public function logout(Request $request): RedirectResponse {
         Auth::logout();
 
         $request->session()->invalidate();
@@ -380,8 +377,7 @@ class LoginController extends Controller
     /**
      * Get validation rules based on login field.
      */
-    protected function getValidationRules(string $loginField): array
-    {
+    protected function getValidationRules(string $loginField): array {
         $rules = [
             'password' => ['required', 'string'],
         ];
@@ -401,17 +397,16 @@ class LoginController extends Controller
     /**
      * Generate a math captcha.
      */
-    protected function generateCaptcha(Request $request, string $context): array
-    {
+    protected function generateCaptcha(Request $request, string $context): array {
         $min = config('tyro-login.captcha.min_number', 1);
         $max = config('tyro-login.captcha.max_number', 10);
 
         $num1 = rand($min, $max);
         $num2 = rand($min, $max);
-        
+
         // Randomly choose addition or subtraction
         $isAddition = (bool) rand(0, 1);
-        
+
         if ($isAddition) {
             $question = "$num1 + $num2 = ?";
             $answer = $num1 + $num2;
@@ -436,10 +431,9 @@ class LoginController extends Controller
     /**
      * Validate the captcha answer.
      */
-    protected function validateCaptcha(Request $request, string $context, $answer): bool
-    {
+    protected function validateCaptcha(Request $request, string $context, $answer): bool {
         $expected = $request->session()->get("tyro-login.captcha.{$context}");
-        
+
         if ($expected === null) {
             return false;
         }
@@ -453,16 +447,14 @@ class LoginController extends Controller
     /**
      * Generate and send OTP to user.
      */
-    protected function generateAndSendOtp(Request $request, $user): void
-    {
+    protected function generateAndSendOtp(Request $request, $user): void {
         $length = config('tyro-login.otp.length', 4);
         $expire = config('tyro-login.otp.expire', 5);
 
-        // Generate OTP
-        $otp = '';
-        for ($i = 0; $i < $length; $i++) {
-            $otp .= rand(0, 9);
-        }
+        // Generate cryptographically secure OTP
+        $min = (int) (10 ** ($length - 1));
+        $max = (int) ((10 ** $length) - 1);
+        $otp = (string) random_int($min, $max);
 
         // Store OTP in cache
         $cacheKey = $this->getOtpCacheKey($user->id);
@@ -470,11 +462,12 @@ class LoginController extends Controller
 
         // Log OTP for development (only if debug is enabled)
         if (config('tyro-login.debug', false)) {
-            Log::info('=== TYRO LOGIN OTP ===');
-            Log::info("User: {$user->email}");
-            Log::info("OTP Code: {$otp}");
-            Log::info("Expires in: {$expire} minutes");
-            Log::info('======================');
+            Log::info('Tyro Login - OTP Generated', [
+                'user_id' => $user->id,
+                'email' => Str::mask($user->email, '*', 3),
+                'otp_length' => $length,
+                'expires_in_minutes' => $expire,
+            ]);
         }
 
         // Send OTP via email if enabled
@@ -491,24 +484,19 @@ class LoginController extends Controller
             $request->session()->put('tyro-login.otp.resend_count', 0);
             $request->session()->put('tyro-login.otp.last_resend', time());
         }
-
-        // TODO: Send OTP via email (integrate with Laravel's mail system)
-        // Mail::to($user->email)->send(new OtpMail($otp));
     }
 
     /**
      * Get the cache key for OTP.
      */
-    protected function getOtpCacheKey($userId): string
-    {
+    protected function getOtpCacheKey($userId): string {
         return "tyro-login:otp:{$userId}";
     }
 
     /**
      * Mask email address for display.
      */
-    protected function maskEmail(string $email): string
-    {
+    protected function maskEmail(string $email): string {
         $parts = explode('@', $email);
         if (count($parts) !== 2) {
             return $email;
@@ -529,24 +517,21 @@ class LoginController extends Controller
     /**
      * Get the lockout cache key for the request.
      */
-    protected function lockoutKey(Request $request): string
-    {
+    protected function lockoutKey(Request $request): string {
         return 'tyro-login:lockout:' . $request->ip();
     }
 
     /**
      * Get the lockout attempts cache key for the request.
      */
-    protected function lockoutAttemptsKey(Request $request): string
-    {
+    protected function lockoutAttemptsKey(Request $request): string {
         return 'tyro-login:lockout-attempts:' . $request->ip();
     }
 
     /**
      * Check if the user is currently locked out.
      */
-    protected function isLockedOut(Request $request): bool
-    {
+    protected function isLockedOut(Request $request): bool {
         if (!config('tyro-login.lockout.enabled', true)) {
             return false;
         }
@@ -569,23 +554,21 @@ class LoginController extends Controller
     /**
      * Get the lockout release timestamp.
      */
-    protected function getLockoutReleaseTime(Request $request): ?int
-    {
+    protected function getLockoutReleaseTime(Request $request): ?int {
         return Cache::get($this->lockoutKey($request));
     }
 
     /**
      * Increment the lockout attempt counter.
      */
-    protected function incrementLockoutAttempts(Request $request): void
-    {
+    protected function incrementLockoutAttempts(Request $request): void {
         if (!config('tyro-login.lockout.enabled', true)) {
             return;
         }
 
         $key = $this->lockoutAttemptsKey($request);
         $attempts = Cache::get($key, 0) + 1;
-        
+
         // Store attempts for the lockout duration + some buffer time
         $durationMinutes = config('tyro-login.lockout.duration_minutes', 15);
         Cache::put($key, $attempts, now()->addMinutes($durationMinutes + 5));
@@ -594,8 +577,7 @@ class LoginController extends Controller
     /**
      * Check if the user should be locked out based on attempts.
      */
-    protected function shouldLockout(Request $request): bool
-    {
+    protected function shouldLockout(Request $request): bool {
         if (!config('tyro-login.lockout.enabled', true)) {
             return false;
         }
@@ -609,8 +591,7 @@ class LoginController extends Controller
     /**
      * Get the remaining attempts before lockout.
      */
-    protected function getRemainingAttempts(Request $request): int
-    {
+    protected function getRemainingAttempts(Request $request): int {
         $attempts = Cache::get($this->lockoutAttemptsKey($request), 0);
         $maxAttempts = config('tyro-login.lockout.max_attempts', 5);
 
@@ -620,8 +601,7 @@ class LoginController extends Controller
     /**
      * Lock out the user.
      */
-    protected function lockoutUser(Request $request): void
-    {
+    protected function lockoutUser(Request $request): void {
         $durationMinutes = config('tyro-login.lockout.duration_minutes', 15);
         $releaseTime = now()->addMinutes($durationMinutes)->timestamp;
 
@@ -631,8 +611,7 @@ class LoginController extends Controller
     /**
      * Clear the lockout for the user.
      */
-    protected function clearLockout(Request $request): void
-    {
+    protected function clearLockout(Request $request): void {
         Cache::forget($this->lockoutKey($request));
         Cache::forget($this->lockoutAttemptsKey($request));
     }

@@ -15,8 +15,7 @@ use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 
-class SocialAuthController extends Controller
-{
+class SocialAuthController extends Controller {
     /**
      * Supported OAuth providers.
      */
@@ -34,8 +33,7 @@ class SocialAuthController extends Controller
     /**
      * Redirect the user to the OAuth provider.
      */
-    public function redirect(Request $request, string $provider): RedirectResponse
-    {
+    public function redirect(Request $request, string $provider): RedirectResponse {
         // Check if social login is enabled
         if (!$this->isSocialLoginEnabled()) {
             return redirect()->route('tyro-login.login')
@@ -54,12 +52,12 @@ class SocialAuthController extends Controller
 
         try {
             // Use the correct driver name for providers with different naming
-            $driverName = match($provider) {
+            $driverName = match ($provider) {
                 'linkedin' => 'linkedin-openid',
                 'slack' => 'slack-openid',
                 default => $provider,
             };
-            
+
             return Socialite::driver($driverName)->redirect();
         } catch (\Exception $e) {
             Log::error('Social login redirect failed', [
@@ -75,8 +73,7 @@ class SocialAuthController extends Controller
     /**
      * Handle the callback from the OAuth provider.
      */
-    public function callback(Request $request, string $provider): RedirectResponse
-    {
+    public function callback(Request $request, string $provider): RedirectResponse {
         // Check if social login is enabled
         if (!$this->isSocialLoginEnabled()) {
             return redirect()->route('tyro-login.login')
@@ -91,12 +88,12 @@ class SocialAuthController extends Controller
 
         try {
             // Use the correct driver name for providers with different naming
-            $driverName = match($provider) {
+            $driverName = match ($provider) {
                 'linkedin' => 'linkedin-openid',
                 'slack' => 'slack-openid',
                 default => $provider,
             };
-            
+
             $socialUser = Socialite::driver($driverName)->user();
         } catch (\Exception $e) {
             Log::error('Social login callback failed', [
@@ -118,8 +115,7 @@ class SocialAuthController extends Controller
     /**
      * Handle the social user authentication.
      */
-    protected function handleSocialUser(Request $request, SocialiteUser $socialUser, string $provider, string $action): RedirectResponse
-    {
+    protected function handleSocialUser(Request $request, SocialiteUser $socialUser, string $provider, string $action): RedirectResponse {
         $email = $socialUser->getEmail();
 
         // Check if email is required and available
@@ -130,13 +126,13 @@ class SocialAuthController extends Controller
 
         // Debug logging
         if (config('tyro-login.debug', false)) {
-            Log::info('=== TYRO LOGIN SOCIAL AUTH ===');
-            Log::info("Provider: {$provider}");
-            Log::info("Provider User ID: {$socialUser->getId()}");
-            Log::info("Email: {$email}");
-            Log::info("Name: {$socialUser->getName()}");
-            Log::info("Action: {$action}");
-            Log::info('==============================');
+            Log::info('Tyro Login - Social Authentication', [
+                'provider' => $provider,
+                'provider_user_id' => $socialUser->getId(),
+                'email' => Str::mask($email, '*', 3),
+                'name' => $socialUser->getName(),
+                'action' => $action,
+            ]);
         }
 
         // Check if we have an existing social account for this provider
@@ -218,8 +214,7 @@ class SocialAuthController extends Controller
     /**
      * Create a new user from social data.
      */
-    protected function createUser(SocialiteUser $socialUser): mixed
-    {
+    protected function createUser(SocialiteUser $socialUser): mixed {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
 
         return $userModel::create([
@@ -233,8 +228,7 @@ class SocialAuthController extends Controller
     /**
      * Create a social account for a user.
      */
-    protected function createSocialAccount($user, SocialiteUser $socialUser, string $provider): SocialAccount
-    {
+    protected function createSocialAccount($user, SocialiteUser $socialUser, string $provider): SocialAccount {
         return SocialAccount::create([
             'user_id' => $user->id,
             'provider' => $provider,
@@ -243,8 +237,8 @@ class SocialAuthController extends Controller
             'provider_avatar' => $socialUser->getAvatar(),
             'access_token' => $socialUser->token ?? null,
             'refresh_token' => $socialUser->refreshToken ?? null,
-            'token_expires_at' => isset($socialUser->expiresIn) 
-                ? now()->addSeconds($socialUser->expiresIn) 
+            'token_expires_at' => isset($socialUser->expiresIn)
+                ? now()->addSeconds($socialUser->expiresIn)
                 : null,
         ]);
     }
@@ -252,15 +246,14 @@ class SocialAuthController extends Controller
     /**
      * Update an existing social account with new token data.
      */
-    protected function updateSocialAccount(SocialAccount $socialAccount, SocialiteUser $socialUser): void
-    {
+    protected function updateSocialAccount(SocialAccount $socialAccount, SocialiteUser $socialUser): void {
         $socialAccount->update([
             'provider_email' => $socialUser->getEmail(),
             'provider_avatar' => $socialUser->getAvatar(),
             'access_token' => $socialUser->token ?? null,
             'refresh_token' => $socialUser->refreshToken ?? null,
-            'token_expires_at' => isset($socialUser->expiresIn) 
-                ? now()->addSeconds($socialUser->expiresIn) 
+            'token_expires_at' => isset($socialUser->expiresIn)
+                ? now()->addSeconds($socialUser->expiresIn)
                 : null,
         ]);
     }
@@ -268,16 +261,14 @@ class SocialAuthController extends Controller
     /**
      * Check if social login is enabled globally.
      */
-    protected function isSocialLoginEnabled(): bool
-    {
+    protected function isSocialLoginEnabled(): bool {
         return config('tyro-login.social.enabled', false);
     }
 
     /**
      * Check if a specific provider is enabled.
      */
-    protected function isProviderEnabled(string $provider): bool
-    {
+    protected function isProviderEnabled(string $provider): bool {
         if (!in_array($provider, $this->supportedProviders)) {
             return false;
         }
@@ -288,8 +279,7 @@ class SocialAuthController extends Controller
     /**
      * Assign the default Tyro role to a user if Tyro is installed.
      */
-    protected function assignTyroRole($user): void
-    {
+    protected function assignTyroRole($user): void {
         if (!config('tyro-login.tyro.assign_default_role', true)) {
             return;
         }
@@ -323,8 +313,7 @@ class SocialAuthController extends Controller
      * Mark user's email as verified if not already verified.
      * Social login confirms email ownership through the OAuth provider.
      */
-    protected function markEmailAsVerified($user): void
-    {
+    protected function markEmailAsVerified($user): void {
         if (!config('tyro-login.social.auto_verify_email', true)) {
             return;
         }
@@ -335,10 +324,10 @@ class SocialAuthController extends Controller
             $user->save();
 
             if (config('tyro-login.debug', false)) {
-                Log::info('=== TYRO LOGIN EMAIL VERIFIED VIA SOCIAL ===');
-                Log::info("User ID: {$user->id}");
-                Log::info("Email: {$user->email}");
-                Log::info('=============================================');
+                Log::info('Tyro Login - Email Verified via Social Login', [
+                    'user_id' => $user->id,
+                    'email' => Str::mask($user->email, '*', 3),
+                ]);
             }
         }
     }
@@ -346,8 +335,7 @@ class SocialAuthController extends Controller
     /**
      * Get enabled providers for display.
      */
-    public static function getEnabledProviders(): array
-    {
+    public static function getEnabledProviders(): array {
         if (!config('tyro-login.social.enabled', false)) {
             return [];
         }
