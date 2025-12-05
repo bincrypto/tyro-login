@@ -567,7 +567,16 @@ class LoginController extends Controller {
         }
 
         $key = $this->lockoutAttemptsKey($request);
-        $attempts = Cache::get($key, 0) + 1;
+        $attempts = Cache::get($key, 0);
+        $maxAttempts = config('tyro-login.lockout.max_attempts', 5);
+
+        // If attempts are already at max (or more) but the user wasn't caught by isLockedOut,
+        // it means the lockout expired naturally. We should reset the counter.
+        if ($attempts >= $maxAttempts) {
+            $attempts = 0;
+        }
+
+        $attempts++;
 
         // Store attempts for the lockout duration + some buffer time
         $durationMinutes = (int) config('tyro-login.lockout.duration_minutes', 15);
