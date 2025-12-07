@@ -23,7 +23,7 @@
                 @csrf
 
                 <!-- OTP Input Section -->
-                <div id="otp-section">
+                <div id="otp-section" style="@error('recovery_code') display: none; @enderror">
                     <div class="form-group">
                         <label class="form-label text-center">Authentication Code</label>
                          <div class="otp-input-container">
@@ -38,7 +38,7 @@
                 </div>
 
                 <!-- Recovery Code Section -->
-                 <div id="recovery-section" style="display: none;">
+                 <div id="recovery-section" style="@error('recovery_code') display: block; @else display: none; @enderror">
                     <div class="form-group">
                         <label for="recovery_code" class="form-label">Recovery Code</label>
                         <input type="text" name="recovery_code" id="recovery_code" class="form-control" placeholder="123abcde-...-...">
@@ -56,7 +56,11 @@
 
             <div class="mt-6 text-center">
                 <button type="button" id="toggle-recovery" class="btn btn-ghost w-full">
-                    Use a recovery code
+                    @error('recovery_code')
+                        Use an authentication code
+                    @else
+                        Use a recovery code
+                    @enderror
                 </button>
             </div>
             
