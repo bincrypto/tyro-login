@@ -18,6 +18,18 @@ trait HasTwoFactorAuth
             'two_factor_recovery_codes' => EncryptedOrPlaintext::class,
             'two_factor_confirmed_at' => 'datetime',
         ]);
+
+        $this->mergeHidden([
+            'two_factor_secret',
+            'two_factor_recovery_codes',
+            'two_factor_confirmed_at',
+            'two_factor_enabled',
+            'access_token',
+            'refresh_token',
+            'token_expires_at',
+            'suspended_at',
+            'suspension_reason',
+        ]);
     }
 
     /**

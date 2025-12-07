@@ -4,9 +4,9 @@ namespace HasinHayder\TyroLogin\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
-class InstallCommand extends Command
-{
+class InstallCommand extends Command {
     /**
      * The name and signature of the console command.
      */
@@ -22,8 +22,7 @@ class InstallCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
+    public function handle(): int {
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -39,6 +38,9 @@ class InstallCommand extends Command
             '--force' => $this->option('force'),
         ]);
         $this->info('   ✓ Configuration published to config/tyro-login.php');
+
+        // Prepare User Model
+        $this->prepareUserModel();
 
         // Ask about views
         if ($this->confirm('Would you like to publish the views for customization?', false)) {
@@ -62,7 +64,7 @@ class InstallCommand extends Command
 
         // Ask about social login
         $withSocial = $this->option('with-social') || $this->confirm('Would you like to enable social login (Google, Facebook, GitHub, etc.)?', false);
-        
+
         if ($withSocial) {
             $this->installSocialLogin();
         }
@@ -115,20 +117,19 @@ class InstallCommand extends Command
     /**
      * Install social login components.
      */
-    protected function installSocialLogin(): void
-    {
+    protected function installSocialLogin(): void {
         $this->info('');
         $this->info('Setting up Social Login...');
 
         // Check if Laravel Socialite is installed
         if (!$this->isSocialiteInstalled()) {
             $this->warn('   Laravel Socialite is not installed.');
-            
+
             if ($this->confirm('   Would you like to install Laravel Socialite now?', true)) {
                 $this->info('   Installing Laravel Socialite...');
-                
+
                 $result = $this->runComposerRequire('laravel/socialite');
-                
+
                 if ($result === 0) {
                     $this->info('   ✓ Laravel Socialite installed successfully');
                 } else {
@@ -178,25 +179,23 @@ class InstallCommand extends Command
     /**
      * Check if Laravel Socialite is installed.
      */
-    protected function isSocialiteInstalled(): bool
-    {
+    protected function isSocialiteInstalled(): bool {
         return class_exists(\Laravel\Socialite\SocialiteServiceProvider::class);
     }
 
     /**
      * Run composer require command.
      */
-    protected function runComposerRequire(string $package): int
-    {
+    protected function runComposerRequire(string $package): int {
         $composer = $this->findComposer();
-        
+
         $process = \Symfony\Component\Process\Process::fromShellCommandline(
             $composer . ' require ' . $package,
             base_path()
         );
-        
+
         $process->setTimeout(300);
-        
+
         $process->run(function ($type, $buffer) {
             $this->output->write($buffer);
         });
@@ -207,8 +206,7 @@ class InstallCommand extends Command
     /**
      * Get the composer command for the environment.
      */
-    protected function findComposer(): string
-    {
+    protected function findComposer(): string {
         $composerPath = base_path('composer.phar');
 
         if (file_exists($composerPath)) {
@@ -221,10 +219,9 @@ class InstallCommand extends Command
     /**
      * Add example .env entries for social login.
      */
-    protected function addEnvExamples(): void
-    {
+    protected function addEnvExamples(): void {
         $envPath = base_path('.env');
-        
+
         if (!File::exists($envPath)) {
             return;
         }
@@ -277,6 +274,54 @@ ENV;
         if ($this->confirm('   Would you like to add social login environment variables to .env?', false)) {
             File::append($envPath, $socialEnvExample);
             $this->info('   ✓ Environment variables added to .env');
+        }
+    }
+
+    /**
+     * Prepare the User model with necessary traits.
+     */
+    protected function prepareUserModel(): void {
+        $path = app_path('Models/User.php');
+
+        if (!File::exists($path)) {
+            return;
+        }
+
+        $contents = File::get($path);
+        $original = $contents;
+
+        // Add Import
+        if (!Str::contains($contents, 'use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;')) {
+            if (Str::contains($contents, 'use HasinHayder\Tyro\Concerns\HasTyroRoles;')) {
+                $contents = str_replace(
+                    'use HasinHayder\Tyro\Concerns\HasTyroRoles;',
+                    "use HasinHayder\Tyro\Concerns\HasTyroRoles;\nuse HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;",
+                    $contents
+                );
+            }
+        }
+
+        // Add Trait Usage
+        if (!Str::contains($contents, 'use HasTwoFactorAuth;')) {
+            if (Str::contains($contents, 'use HasTyroRoles;')) {
+                $contents = str_replace(
+                    'use HasTyroRoles;',
+                    "use HasTyroRoles;\n    use HasTwoFactorAuth;",
+                    $contents
+                );
+            } else if (Str::contains($contents, 'use HasApiTokens, HasTyroRoles;')) { //use HasApiTokens, HasTyroRoles;
+                $contents = str_replace(
+                    'use HasApiTokens, HasTyroRoles;',
+                    'use HasApiTokens, HasTyroRoles, HasTwoFactorAuth;',
+                    $contents
+                );
+            }
+        }
+
+
+        if ($contents !== $original) {
+            File::put($path, $contents);
+            $this->info('   ✓ HasTwoFactorAuth trait added to User model');
         }
     }
 }
