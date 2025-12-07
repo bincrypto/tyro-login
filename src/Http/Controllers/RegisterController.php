@@ -110,11 +110,18 @@ class RegisterController extends Controller
         }
 
         if (config('tyro-login.registration.auto_login', true)) {
-            Auth::login($user);
-
             if (config('tyro-login.two_factor.enabled', false)) {
+                // Do not fully login yet - set session and redirect to setup
+                $request->session()->put('login.id', $user->id);
+                // Default remember to false for registration flow or make it configurable/assumed true?
+                // Let's assume false for security on new device, or true if auto_login implies it.
+                // Standard auto-login usually implies session persistence.
+                $request->session()->put('login.remember', true); 
+
                 return redirect()->route('tyro-login.two-factor.setup');
             }
+            
+            Auth::login($user);
         }
 
         return redirect(config('tyro-login.redirects.after_register', '/'));

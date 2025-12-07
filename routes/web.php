@@ -91,15 +91,8 @@ Route::middleware('guest')->group(function () {
         
     Route::post('two-factor/verify', [TwoFactorController::class, 'verify'])
         ->name('two-factor.verify');
-});
-
-// Authenticated routes
-Route::middleware('auth')->group(function () {
-    // Logout - POST only for CSRF protection
-    Route::post(config('tyro-login.routes.logout', 'logout'), [LoginController::class, 'logout'])
-        ->name('logout');
         
-    // 2FA Setup routes
+    // 2FA Setup routes (guest because user is not fully logged in yet)
     Route::get('two-factor/setup', [TwoFactorController::class, 'showSetup'])
         ->name('two-factor.setup');
         
@@ -111,4 +104,11 @@ Route::middleware('auth')->group(function () {
         
     Route::get('two-factor/recovery-codes', [TwoFactorController::class, 'showRecoveryCodes'])
         ->name('two-factor.recovery-codes');
+});
+
+// Authenticated routes
+Route::middleware('auth')->group(function () {
+    // Logout - POST only for CSRF protection
+    Route::post(config('tyro-login.routes.logout', 'logout'), [LoginController::class, 'logout'])
+        ->name('logout');
 });

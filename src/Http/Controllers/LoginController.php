@@ -156,7 +156,12 @@ class LoginController extends Controller {
                     return redirect()->route('tyro-login.two-factor.challenge');
                 } else {
                     // User hasn't set up 2FA yet - redirect to setup
-                    // They remain logged in for this
+                    // Log them out to ensure they can't bypass setup
+                    Auth::logout();
+                    
+                    $request->session()->put('login.id', $user->id);
+                    $request->session()->put('login.remember', $remember);
+
                     return redirect()->route('tyro-login.two-factor.setup');
                 }
             }

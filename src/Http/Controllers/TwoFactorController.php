@@ -22,6 +22,19 @@ class TwoFactorController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user) {
+            $userId = $request->session()->get('login.id');
+            if (!$userId) {
+                return redirect()->route('tyro-login.login');
+            }
+            $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+            $user = $userModel::find($userId);
+            
+            if (!$user) {
+                return redirect()->route('tyro-login.login');
+            }
+        }
+
         if ($user->two_factor_confirmed_at) {
             return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
         }
@@ -72,6 +85,20 @@ class TwoFactorController extends Controller
         ]);
 
         $user = Auth::user();
+
+        if (!$user) {
+            $userId = $request->session()->get('login.id');
+            if (!$userId) {
+                return redirect()->route('tyro-login.login');
+            }
+            $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+            $user = $userModel::find($userId);
+            
+            if (!$user) {
+                return redirect()->route('tyro-login.login');
+            }
+        }
+        
         $google2fa = new Google2FA();
         
         $secretKey = $this->getTwoFactorSecret($user);
@@ -100,7 +127,14 @@ class TwoFactorController extends Controller
             'two_factor_confirmed_at' => now(),
         ])->save();
 
-        // Redirect to show recovery codes
+        // Finalize Login if not already logged in
+        if (!Auth::check()) {
+            Auth::login($user, $request->session()->get('login.remember', false));
+            $request->session()->forget(['login.id', 'login.remember']);
+            $request->session()->regenerate();
+        }
+
+        // Redirect to show recovery codes and allow user to proceed
         return redirect()->route('tyro-login.two-factor.recovery-codes');
     }
     
@@ -109,6 +143,26 @@ class TwoFactorController extends Controller
      */
     public function skip(Request $request): RedirectResponse
     {
+        if (!config('tyro-login.two_factor.allow_skip', false)) {
+            abort(403, 'Two factor authentication setup is required.');
+        }
+
+        $user = Auth::user();
+
+        if (!$user) {
+            $userId = $request->session()->get('login.id');
+            if ($userId) {
+                $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+                $user = $userModel::find($userId);
+                
+                if ($user) {
+                    Auth::login($user, $request->session()->get('login.remember', false));
+                    $request->session()->forget(['login.id', 'login.remember']);
+                    $request->session()->regenerate();
+                }
+            }
+        }
+
         return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
     }
 
