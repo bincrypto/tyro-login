@@ -73,14 +73,14 @@
     .mt-4 { margin-top: 1rem; }
     .mb-6 { margin-bottom: 1.5rem; }
     .text-sm { font-size: 0.875rem; }
-    .text-gray-500 { color: #6b7280; }
-    .hover\:text-gray-700:hover { color: #374151; }
+    .text-gray-500 { color: var(--muted-foreground); }
+    .hover\:text-gray-700:hover { color: var(--foreground); }
     .font-medium { font-weight: 500; }
     .block { display: block; }
-    .font-mono { font-family: monospace; }
-    .bg-gray-100 { background-color: #f3f4f6; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .bg-gray-100 { background-color: var(--muted); }
     .p-2 { padding: 0.5rem; }
-    .rounded { border-radius: 0.25rem; }
+    .rounded { border-radius: 0.375rem; }
     .w-full { width: 100%; }
     
     .otp-input-container {
@@ -96,7 +96,7 @@
         font-size: 1.5rem;
         font-weight: 600;
         border: 1px solid var(--input);
-        border-radius: 0.5rem;
+        border-radius: 0.375rem;
         background-color: var(--background);
         color: var(--foreground);
         transition: border-color 0.15s ease, box-shadow 0.15s ease;

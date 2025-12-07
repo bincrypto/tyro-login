@@ -54,15 +54,17 @@
         padding: 1rem;
         border-radius: 0.5rem;
         margin: 1.5rem 0;
+        border: 1px solid var(--border);
     }
     .recovery-code {
         background: var(--background);
         padding: 0.5rem;
         text-align: center;
-        border-radius: 0.25rem;
-        font-family: monospace;
+        border-radius: 0.375rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         font-size: 0.875rem;
         border: 1px solid var(--border);
+        color: var(--foreground);
     }
     .btn-secondary {
         background-color: var(--secondary);
@@ -70,8 +72,8 @@
         border: 1px solid var(--border);
     }
     .btn-secondary:hover {
-        background-color: var(--secondary-foreground); /* approximation */
-        opacity: 0.9;
+        background-color: var(--secondary);
+        filter: brightness(0.95);
     }
     .flex { display: flex; }
     .gap-4 { gap: 1rem; }
