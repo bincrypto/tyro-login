@@ -173,7 +173,7 @@ class InstallCommand extends Command {
         $this->info('   - GitLab     (TYRO_LOGIN_SOCIAL_GITLAB=true)');
 
         // Add example .env entries
-        $this->addEnvExamples();
+        // $this->addEnvExamples();
     }
 
     /**
