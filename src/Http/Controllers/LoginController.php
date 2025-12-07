@@ -146,7 +146,7 @@ class LoginController extends Controller {
 
             // Check if 2FA is enabled
             if (config('tyro-login.two_factor.enabled', false)) {
-                if (!empty($user->two_factor_confirmed_at)) {
+                if (filled($user->two_factor_confirmed_at)) {
                     // User has 2FA enabled - lock them out until verified
                     Auth::logout();
                     
