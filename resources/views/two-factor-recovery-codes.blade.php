@@ -66,15 +66,6 @@
         border: 1px solid var(--border);
         color: var(--foreground);
     }
-    .btn-secondary {
-        background-color: var(--secondary);
-        color: var(--secondary-foreground);
-        border: 1px solid var(--border);
-    }
-    .btn-secondary:hover {
-        background-color: var(--secondary);
-        filter: brightness(0.95);
-    }
     .flex { display: flex; }
     .gap-4 { gap: 1rem; }
     .w-full { width: 100%; }

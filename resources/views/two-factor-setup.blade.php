@@ -50,12 +50,14 @@
                 </button>
             </form>
 
+            @if(config('tyro-login.two_factor.allow_skip', false))
             <form method="POST" action="{{ route('tyro-login.two-factor.skip') }}" class="mt-4">
                 @csrf
-                <button type="submit" class="w-full text-center text-gray-500 hover:text-gray-700 text-sm font-medium">
+                <button type="submit" class="btn btn-ghost w-full">
                     Skip for now
                 </button>
             </form>
+            @endif
         </div>
     </div>
 </div>

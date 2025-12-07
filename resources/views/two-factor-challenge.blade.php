@@ -55,7 +55,7 @@
             </form>
 
             <div class="mt-6 text-center">
-                <button type="button" id="toggle-recovery" class="text-sm text-gray-500 hover:text-gray-700 underline bg-transparent border-0 cursor-pointer">
+                <button type="button" id="toggle-recovery" class="btn btn-ghost w-full">
                     Use a recovery code
                 </button>
             </div>
@@ -63,7 +63,7 @@
              <div class="mt-4 text-center">
                  <form method="POST" action="{{ route('tyro-login.logout') }}">
                      @csrf
-                    <button type="submit" class="text-xs text-gray-400 hover:text-gray-600 bg-transparent border-0 cursor-pointer">
+                    <button type="submit" class="btn btn-ghost w-full" style="opacity: 0.7;">
                         Cancel & Logout
                     </button>
                  </form>

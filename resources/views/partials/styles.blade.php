@@ -309,6 +309,25 @@
         transform: scale(0.98);
     }
 
+    .btn-secondary {
+        background-color: var(--secondary);
+        color: var(--secondary-foreground);
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--secondary);
+        filter: brightness(0.95);
+    }
+
+    .btn-ghost {
+        background-color: transparent;
+        color: var(--foreground);
+    }
+
+    .btn-ghost:hover {
+        background-color: var(--muted);
+    }
+
     .btn:disabled {
         opacity: 0.6;
         cursor: not-allowed;

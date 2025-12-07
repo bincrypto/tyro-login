@@ -418,8 +418,11 @@ return [
         // Page title for challenge
         'challenge_title' => env('TYRO_LOGIN_2FA_CHALLENGE_TITLE', 'Two Factor Authentication'),
 
-        // Page subtitle for challenge
-        'challenge_subtitle' => env('TYRO_LOGIN_2FA_CHALLENGE_SUBTITLE', 'Please enter the code from your authenticator app.'),
+        // Challenge subtitle
+        'challenge_subtitle' => env('TYRO_LOGIN_2FA_CHALLENGE_SUBTITLE', 'Enter the code from your authenticator app.'),
+
+        // Allow user to skip 2FA setup
+        'allow_skip' => env('TYRO_LOGIN_2FA_ALLOW_SKIP', false),
     ],
 
     /*
