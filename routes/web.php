@@ -111,4 +111,6 @@ Route::middleware('auth')->group(function () {
     // Logout - POST only for CSRF protection
     Route::post(config('tyro-login.routes.logout', 'logout'), [LoginController::class, 'logout'])
         ->name('logout');
+    Route::get('two-factor/recovery-codes', [TwoFactorController::class, 'showRecoveryCodes'])
+        ->name('two-factor.recovery-codes');
 });
