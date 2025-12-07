@@ -6,7 +6,7 @@ return [
     | Tyro Login Version
     |--------------------------------------------------------------------------
     */
-    'version' => '1.6.2',
+    'version' => '1.6.3',
 
     /*
     |--------------------------------------------------------------------------
@@ -194,32 +194,32 @@ return [
     'password' => [
         // Minimum password length
         'min_length' => env('TYRO_LOGIN_PASSWORD_MIN_LENGTH', 8),
-        
+
         // Maximum password length (null for no limit)
         'max_length' => env('TYRO_LOGIN_PASSWORD_MAX_LENGTH', null),
-        
+
         // Require password confirmation
         'require_confirmation' => env('TYRO_LOGIN_PASSWORD_REQUIRE_CONFIRMATION', true),
-        
+
         // Password complexity requirements
         'complexity' => [
             // Require at least one uppercase letter
             'require_uppercase' => env('TYRO_LOGIN_PASSWORD_REQUIRE_UPPERCASE', false),
-            
+
             // Require at least one lowercase letter
             'require_lowercase' => env('TYRO_LOGIN_PASSWORD_REQUIRE_LOWERCASE', false),
-            
+
             // Require at least one number
             'require_numbers' => env('TYRO_LOGIN_PASSWORD_REQUIRE_NUMBERS', false),
-            
+
             // Require at least one special character
             'require_special_chars' => env('TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS', false),
-            
+
         ],
-        
+
         // Common password validation
         'check_common_passwords' => env('TYRO_LOGIN_PASSWORD_CHECK_COMMON', false),
-        
+
         // Disallow user information in password (email, name parts)
         'disallow_user_info' => env('TYRO_LOGIN_PASSWORD_DISALLOW_USER_INFO', false),
     ],
