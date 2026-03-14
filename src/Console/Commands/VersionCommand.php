@@ -21,8 +21,8 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
+
         $version = '2.3.3'; //fix(otp): improvement for OTP code generation by implementing proper type casting config values, issue #5
-        
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
