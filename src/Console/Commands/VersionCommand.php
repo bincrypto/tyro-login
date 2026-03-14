@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = '2.3.2'; //fix(social): automatically create account if the user doesn't exist after social login
+        $version = '2.3.3'; //fix(otp): improvement for OTP code generation by implementing proper type casting config values, issue #5
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -42,6 +42,7 @@ class VersionCommand extends Command
     }
 }
 
+//2.3.3 - fix(otp): improvement for OTP code generation by implementing proper type casting config values, issue #5
 //2.3.2 - fix(social): automatically create account if the user doesn't exist after social login
 //2.3.1 - Bug fix release for referral tracking logic
 //2.3.0 - Add complete invitation/referral link management with automatic referral tracking during registration, including CLI commands for managing links and models for data persistence.
